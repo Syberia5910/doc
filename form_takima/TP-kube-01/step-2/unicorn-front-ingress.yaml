@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unicorn-front-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: test.nicolas-lecaille.takima.school
+      http:
+        paths:
+          - backend:
+              service:
+                name: unicorn-front-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+
+  tls:
+    - hosts:
+      - test.nicolas-lecaille.takima.school
+      secretName: app-wildcard

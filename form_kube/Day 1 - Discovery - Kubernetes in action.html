@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/ -->
+<html lang="en" class="js-focus-visible js" data-js-focus-visible=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style></style>
+    
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-8.1.1">
+    
+    
+      
+        <title>Day 1 - Discovery - Kubernetes in action</title>
+      
+    
+    
+      <link rel="stylesheet" href="./Day 1 - Discovery - Kubernetes in action_files/main.23b6d78a.min.css">
+      
+        
+        <link rel="stylesheet" href="./Day 1 - Discovery - Kubernetes in action_files/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#e92063">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="./Day 1 - Discovery - Kubernetes in action_files/css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="pink" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#day-1-discover-kubernetes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-header__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 1 - Discovery - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kubernetes in action
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Day 1 - Discovery
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">Type to start searching</div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-tabs__link">
+      Briefing
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-tabs__link md-tabs__link--active">
+        TP
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-tabs__link">
+      Cheatsheet
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-nav__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 1 - Discovery - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    Kubernetes in action
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-nav__link">
+        Briefing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked="">
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          TP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="TP" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          TP
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Day 1 - Discovery
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-nav__link md-nav__link--active">
+        Day 1 - Discovery
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#initialisation-des-outils" class="md-nav__link">
+    Initialisation des outils
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#installation-dun-editeur-de-code" class="md-nav__link">
+    Installation d'un éditeur de code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#installation-de-kubectl" class="md-nav__link">
+    Installation de kubectl
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation de kubectl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#linux-macos" class="md-nav__link">
+    Linux / MacOS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#kubeconfig" class="md-nav__link">
+    Kubeconfig
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#lens" class="md-nav__link">
+    Lens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#premieres-commandes" class="md-nav__link">
+    Premières commandes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-1-premieres-ressources-podsreplicasetdeployment" class="md-nav__link">
+    Étape 1 : Premières ressources : Pods/Replicaset/Deployment
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 1 : Premières ressources : Pods/Replicaset/Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#pods" class="md-nav__link">
+    Pods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#pod-yaml-definition" class="md-nav__link">
+    Pod Yaml Definition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#imperatif-vs-declaratif" class="md-nav__link">
+    Impératif Vs Déclaratif
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#replicaset" class="md-nav__link">
+    Replicaset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#deployment" class="md-nav__link">
+    Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#faire-un-rollback" class="md-nav__link">
+    Faire un Rollback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mettre-a-lechelle" class="md-nav__link">
+    Mettre à l'échelle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mettre-en-standby-un-deployment" class="md-nav__link">
+    Mettre en standby un deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#impact-des-limites-memoire" class="md-nav__link">
+    Impact des limites Mémoire
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#impact-des-limites-cpu" class="md-nav__link">
+    Impact des limites CPU
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-2-publication-serviceingress" class="md-nav__link">
+    Étape 2 : Publication Service/Ingress
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 2 : Publication Service/Ingress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#service" class="md-nav__link">
+    Service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#ingress" class="md-nav__link">
+    Ingress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus_1" class="md-nav__link">
+    Bonus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mise-en-situation" class="md-nav__link">
+    Mise en situation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-3-configmapsecret" class="md-nav__link">
+    Étape 3 : ConfigMap/Secret
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 3 : ConfigMap/Secret">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#exemple" class="md-nav__link">
+    Exemple :
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#secret" class="md-nav__link">
+    Secret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus_2" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-1-rendre-sa-couleur-secrete" class="md-nav__link">
+    Bonus 1 : Rendre sa couleur secrète
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-2-mon-pod-est-il-en-vie" class="md-nav__link">
+    Bonus 2 : Mon pod est-il en vie ?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-3-let-my-kubernetes-scale" class="md-nav__link">
+    Bonus 3 : Let my kubernetes Scale !!!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-4-control-my-traffic" class="md-nav__link">
+    Bonus 4: Control my traffic !!!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-5-run-on-one-az" class="md-nav__link">
+    Bonus 5: Run on one AZ
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-6-run-one-pod-on-each-server" class="md-nav__link">
+    Bonus 6: Run one pod on each server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-7-change-my-rolling-update-policy" class="md-nav__link">
+    Bonus 7: Change my rolling update policy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-nav__link">
+        Day 2 - Deep Dive
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/" class="md-nav__link">
+        Day 3 - GitOps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-nav__link">
+        Day 4 - Monitoring
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-nav__link">
+        Cheatsheet
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#initialisation-des-outils" class="md-nav__link">
+    Initialisation des outils
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#installation-dun-editeur-de-code" class="md-nav__link">
+    Installation d'un éditeur de code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#installation-de-kubectl" class="md-nav__link">
+    Installation de kubectl
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation de kubectl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#linux-macos" class="md-nav__link">
+    Linux / MacOS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#kubeconfig" class="md-nav__link">
+    Kubeconfig
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#lens" class="md-nav__link">
+    Lens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#premieres-commandes" class="md-nav__link">
+    Premières commandes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-1-premieres-ressources-podsreplicasetdeployment" class="md-nav__link">
+    Étape 1 : Premières ressources : Pods/Replicaset/Deployment
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 1 : Premières ressources : Pods/Replicaset/Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#pods" class="md-nav__link">
+    Pods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#pod-yaml-definition" class="md-nav__link">
+    Pod Yaml Definition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#imperatif-vs-declaratif" class="md-nav__link">
+    Impératif Vs Déclaratif
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#replicaset" class="md-nav__link">
+    Replicaset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#deployment" class="md-nav__link">
+    Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#faire-un-rollback" class="md-nav__link">
+    Faire un Rollback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mettre-a-lechelle" class="md-nav__link">
+    Mettre à l'échelle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mettre-en-standby-un-deployment" class="md-nav__link">
+    Mettre en standby un deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#impact-des-limites-memoire" class="md-nav__link">
+    Impact des limites Mémoire
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#impact-des-limites-cpu" class="md-nav__link">
+    Impact des limites CPU
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-2-publication-serviceingress" class="md-nav__link">
+    Étape 2 : Publication Service/Ingress
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 2 : Publication Service/Ingress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#service" class="md-nav__link">
+    Service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#ingress" class="md-nav__link">
+    Ingress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus_1" class="md-nav__link">
+    Bonus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#mise-en-situation" class="md-nav__link">
+    Mise en situation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#etape-3-configmapsecret" class="md-nav__link">
+    Étape 3 : ConfigMap/Secret
+  </a>
+  
+    <nav class="md-nav" aria-label="Étape 3 : ConfigMap/Secret">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#exemple" class="md-nav__link">
+    Exemple :
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#secret" class="md-nav__link">
+    Secret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus_2" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-1-rendre-sa-couleur-secrete" class="md-nav__link">
+    Bonus 1 : Rendre sa couleur secrète
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-2-mon-pod-est-il-en-vie" class="md-nav__link">
+    Bonus 2 : Mon pod est-il en vie ?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-3-let-my-kubernetes-scale" class="md-nav__link">
+    Bonus 3 : Let my kubernetes Scale !!!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-4-control-my-traffic" class="md-nav__link">
+    Bonus 4: Control my traffic !!!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-5-run-on-one-az" class="md-nav__link">
+    Bonus 5: Run on one AZ
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-6-run-one-pod-on-each-server" class="md-nav__link">
+    Bonus 6: Run one pod on each server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#bonus-7-change-my-rolling-update-policy" class="md-nav__link">
+    Bonus 7: Change my rolling update policy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="day-1-discover-kubernetes">Day 1: Discover Kubernetes</h1>
+<h2 id="initialisation-des-outils">Initialisation des outils</h2>
+<p>Vous avez dû recevoir un petit cadeau dans votre boîte mail nommé <code>kubeconfig</code>.
+Ce fichier est la clef d’accès au cluster Kubernetes qui a été spécialement provisionné pour que vous puissiez vous amuser à déployer des ressources, publier des services et les scaler.
+Pour pouvoir l’utiliser, vous devrez d’abord installer kubectl. Il s’agit de l'outil d’administration en ligne de commande (CLI) pour manager Kubernetes.</p>
+<h2 id="installation-dun-editeur-de-code">Installation d'un éditeur de code</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Il est conseillé d'installer un éditeur de code complet pour l'édition des fichiers tout au long de cette formation.</p>
+</div>
+<p>Si vous n'en avez pas, vous pouvez utiliser <a href="https://code.visualstudio.com/" target="_blank">VsCode</a> .</p>
+<h2 id="installation-de-kubectl">Installation de kubectl</h2>
+<h3 id="linux-macos">Linux / MacOS</h3>
+<p>Téléchargez le client : 
+</p><div class="highlight"><pre id="__code_1"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_1 &gt; code"></button><code tabindex="0"><a id="__codelineno-0-1" name="__codelineno-0-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-0-1"></a>curl<span class="w"> </span>-LO<span class="w"> </span><span class="s2">"https://dl.k8s.io/release/</span><span class="k">$(</span>curl<span class="w"> </span>-L<span class="w"> </span>-s<span class="w"> </span>https://dl.k8s.io/release/stable.txt<span class="k">)</span><span class="s2">/bin/linux/amd64/kubectl"</span>
+</code></pre></div><p></p>
+<p>Le rendre exécutable :
+</p><div class="highlight"><pre id="__code_2"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_2 &gt; code"></button><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-1-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>./kubectl
+</code></pre></div><p></p>
+<p>Déplacez le binaire dans votre PATH :
+</p><div class="highlight"><pre id="__code_3"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_3 &gt; code"></button><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-2-1"></a>sudo<span class="w"> </span>mv<span class="w"> </span>./kubectl<span class="w"> </span>/usr/local/bin/kubectl
+</code></pre></div><p></p>
+<p>Testez pour vous assurer que la version que vous avez installée est à jour :
+</p><div class="highlight"><pre id="__code_4"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_4 &gt; code"></button><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-3-1"></a>kubectl<span class="w"> </span>version<span class="w"> </span>--client
+</code></pre></div><p></p>
+<h3 id="windows">Windows</h3>
+<p>Téléchargez le client :
+</p><div class="highlight"><pre id="__code_5"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_5 &gt; code"></button><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-4-1"></a>curl.exe<span class="w"> </span>-LO<span class="w"> </span><span class="s2">"https://dl.k8s.io/release/v1.29.1/bin/windows/amd64/kubectl.exe"</span>
+</code></pre></div><p></p>
+<p>Ajoutez l'exécutable dans le PATH.
+<a href="https://www.malekal.com/variables-environnement-windows/" target="_blank">Tutoriel sous Windows 10</a></p>
+<p>Testez pour vous assurer que la version que vous avez installée est à jour :
+</p><div class="highlight"><pre id="__code_6"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_6 &gt; code"></button><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-5-1"></a>kubectl<span class="w"> </span>version<span class="w"> </span>--client
+</code></pre></div><p></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Nous recommandons vivement de mettre en place l'autocompletion qui simplifiera beaucoup l'usage de du CLI kubectl :
+<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion" target="_blank">lien pour la mise en place ici</a>
+Choisissez le bon onglet en fonction du shell que vous utilisez</p>
+</div>
+<h2 id="kubeconfig">Kubeconfig</h2>
+<p>Votre client Kubectl est maintenant opérationnel. Pour administrer un cluster Kubernetes, vous allez devoir utiliser les informations de connexion présentes dans le fichier kubeconfig. Pour cela, vous devez simplement placer ce fichier dans <code>$HOME/.kube/config</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Quelles sont les informations que l'on retrouve dans ce fichier ?</p>
+</div>
+<h2 id="lens">Lens</h2>
+<p>Lens est un IDE (Integrated Development Environment) qui permet d'administrer localement plusieurs clusters kubernetes. Cela vous permettra d'avoir une visualisation des ressources créées et de pouvoir les éditer (même si on va privilégier le CLI kubectl)</p>
+<p>Pour ce cours, vous pouvez utiliser la version Open Source nommée OpenLens : https://github.com/MuhammedKalkan/OpenLens</p>
+<h2 id="premieres-commandes">Premières commandes</h2>
+<p>Super ! Vous êtes maintenant prêt à utiliser Kubernetes. Comme tout bon outil d’administration, kubectl propose un helper assez fourni. Vous pouvez y jeter un coup d'œil :</p>
+<div class="highlight"><pre id="__code_7"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_7 &gt; code"></button><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-6-1"></a>kubectl<span class="w"> </span>-h
+</code></pre></div>
+<p>La doc suivante est également très intéressante pour approfondir l'utilisation de kubectl : <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/kubectl%20CheatSheet" target="_blank">https://kubernetes.io/docs/reference/kubectl/cheatsheet/</a></p>
+<p>Assurez-vous d'être dans le bon context (bon cluster kubernetes utilisé) :</p>
+<div class="highlight"><pre id="__code_8"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_8 &gt; code"></button><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-7-1"></a>kubectl<span class="w"> </span>config<span class="w"> </span>view
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-7-2"></a>kubectl<span class="w"> </span>config<span class="w"> </span>current-context
+</code></pre></div>
+<p>Pour commencer, il faut savoir que Kubernetes fonctionne avec des <code>Namespaces</code> pour séparer de manière logique les ressources. Cela permet de séparer les projets ou les environnements par exemple et de définir des droits utilisateur sur chacun d’entre eux.</p>
+<p>Dans le cadre de cet atelier, vous aurez accès à un <code>Namespace</code> personnel qui a pour libellé votre username : si votre mail est toto@exemple.com, votre namespace se nommera toto.</p>
+<p>Maintenant, essayez de connaître les pods qui tournent dans votre namespace :</p>
+<div class="highlight"><pre id="__code_9"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_9 &gt; code"></button><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-8-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>votre_namespace
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Ici un "No resources found ..." témoigne d'un succès de l'appel à l'api kubernetes. Il n'y a simplement pas de Pod à lister, pour le moment...</p>
+</div>
+<p>Maintenant, essayez la même commande sur un autre namespace :</p>
+<div class="highlight"><pre id="__code_10"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_10 &gt; code"></button><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-9-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>default
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Quelle est la différence ?</p>
+</div>
+<h2 id="etape-1-premieres-ressources-podsreplicasetdeployment">Étape 1 : Premières ressources : Pods/Replicaset/Deployment</h2>
+<h3 id="pods">Pods</h3>
+<p>Dans le monde Kubernetes, TOUT est ressource : un déploiement est une ressource, un pod est une ressource, une configuration est une ressource, un disque est une ressource, etc. Tous ces objets Kubernetes peuvent être décrits dans un fichier (souvent un fichier yaml).</p>
+<p>Le <code>Pod</code> est la ressource minimale et triviale qu’il est possible de déployer dans Kubernetes en termes de ressources applicatives. Pour faire simple, un pod est une ressource qui héberge un ou plusieurs containers. Comme pour un conteneur démarré avec Docker, vous devez définir une image Docker à consommer, des variables, des volumes. Par exemple :</p>
+<div class="highlight"><pre id="__code_11"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_11 &gt; code"></button><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-10-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>mynginx<span class="w"> </span>--image<span class="w"> </span>registry.takima.io/school/proxy/nginx
+</code></pre></div>
+<p>Pour chaque ressource, nous proposerons un lien qui renvoie vers la documentation officielle de Kubernetes, qui est une source fiable et souvent utile pour se renseigner sur les différentes caractéristiques des ressources.</p>
+<p>Pour le Pod, c'est par ici : <a href="https://kubernetes.io/docs/concepts/workloads/pods/" target="_blank">https://kubernetes.io/docs/concepts/workloads/pods/</a></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Derrière cette commande, un fichier json de type POD est généré et est envoyé au KubeApi pour la création.</p>
+</div>
+<p>Observez la création du pod :</p>
+<div class="highlight"><pre id="__code_12"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_12 &gt; code"></button><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-11-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>mynginx
+</code></pre></div>
+<p>Vous pouvez aussi décrire le fichier yaml qui défini le pod :</p>
+<div class="highlight"><pre id="__code_13"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_13 &gt; code"></button><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-12-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>mynginx<span class="w"> </span>-o<span class="w"> </span>yaml
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Quelles sont les propriétés principales que l'on retrouve ?</p>
+</div>
+<p>Vous retrouvez dans les root properties :</p>
+<ul>
+<li>apiVersion</li>
+<li>kind</li>
+<li>metadata</li>
+<li>spec</li>
+</ul>
+<p>Maintenant, détruisez le pod :</p>
+<div class="highlight"><pre id="__code_14"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_14 &gt; code"></button><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-13-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pods<span class="w"> </span>nom_du_pod
+</code></pre></div>
+<p>Voilà, vous avez créé et supprimé votre première ressource dans kubernetes. Ce n'est pas si compliqué n'est-ce pas ?</p>
+<h3 id="pod-yaml-definition">Pod Yaml Definition</h3>
+<p>Nous allons imaginer une application vide, qui s'appelle Unicorn. Pour l'instant, <strong>Unicorn</strong> n'est qu'un conteneur Nginx tout vide, c'est un <strong>front</strong>.</p>
+<p>Par soucis de convention, nous vous proposons de créer un fichier <code>unicorn-front-pod.yml</code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Comme dans kubernetes TOUT est ressource yaml, nous te conseillons de créer un dossier et une arborescence pour pouvoir les éditer et les modifier. par exemple <code>TP-kube-01/step-1</code> dans lequel vous placerez vos ressources yaml manipulées.</p>
+</div>
+<p>Pour appliquer une ressource kubernetes décrite en tant que yaml la commande est toujours la même : <code>kubectl apply -f monfichier.yml</code></p>
+<p>À vous de jouer. Essayez de créer la même ressource avec un fichier yaml :</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Pour avoir le yaml correspondant à une ressource à créer, vous pouvez utiliser la fonction dry-run, exemple :</p>
+<div class="highlight"><pre id="__code_15"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_15 &gt; code"></button><code tabindex="0"><a id="__codelineno-14-1" name="__codelineno-14-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-14-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>mynginx2<span class="w"> </span>--image<span class="w"> </span>registry.takima.io/school/proxy/nginx<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>unicorn-front-pod.yml
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-14-3"></a><span class="c1"># Pour appliquer une ressource décrite dans un yaml :</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-14-4"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>unicorn-front-pod.yml
+</code></pre></div>
+<p>Cette commande ne créera pas le pod dans kubernetes mais dumpera l'équivalant du
+fichier yaml qui aurait été envoyé au KubeApi pour la création.
+C'est très utile pour avoir un template de ressource voulu et ne pas démarrer avec un yaml vierge</p>
+<p>Il y a églament une commande <code>kubectl create</code> permettant pour créer d'autres ressources supportant le <code>--dry-run=client -o yaml</code>
+permettant de générer rapidement les yaml de nos ressources si besoin.</p>
+</div>
+<p>Comme avec docker, dans kubernetes, vous pouvez accéder à votre conteneur en mode exécution si besoin (remarquez que l’on retrouve des options Docker) :</p>
+<p></p><div class="highlight"><pre id="__code_16"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_16 &gt; code"></button><code tabindex="0"><a id="__codelineno-15-1" name="__codelineno-15-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-15-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>nom_du_pod<span class="w"> </span>-it<span class="w"> </span>--<span class="w"> </span>bash
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-15-3"></a><span class="c1"># -it pour s'attacher de façon interactive et avoir la main dans l'invite de commande</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-15-4"></a><span class="c1"># -i pour attacher stdin et -t pour faire de stdin un TTY</span>
+</code></pre></div>
+Pensez à sortir de votre container avec un <code>ctrl + D</code> ou <code>exit</code>.<p></p>
+<p>La commande suivante permet de voir les logs :</p>
+<div class="highlight"><pre id="__code_17"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_17 &gt; code"></button><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-16-1"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>nom_du_pod
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Avec l'option <code>-f --follow</code> le CLI vous stream les logs sur votre terminal.
+</p><div class="highlight"><pre id="__code_18"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_18 &gt; code"></button><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-17-1"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>nom_du_pod
+</code></pre></div><p></p>
+</div>
+<p>Détruisez de nouveau le pod :</p>
+<div class="highlight"><pre id="__code_19"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_19 &gt; code"></button><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-18-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pods<span class="w"> </span>nom_du_pod
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Attention, le pod ne s'appelle plus <code>mynginx</code>, vérifiez le fichier .yaml généré précédemment.</p>
+</div>
+<h3 id="imperatif-vs-declaratif">Impératif Vs Déclaratif</h3>
+<p>Vous venez de voir plusieurs façons de créer une ressource kubernetes :</p>
+<ul>
+<li><code>kubectl run</code> / <code>kubectl create ...</code></li>
+<li><code>kubectl apply -f my-ressources.yaml</code></li>
+</ul>
+<p>Ces deux façons sont bien différentes :</p>
+<ul>
+<li>La première est impérative : elle exécute ce qu'on lui demande</li>
+<li>La seconde est déclarative : elle s'intéresse à l'état que l'on souhaite avoir et réalise les changements/créations nécessaires</li>
+</ul>
+<p>De manière générale, on préférera la méthode déclarative pour plusieurs raisons :</p>
+<ol>
+<li>Lorsque l'on déploie des ressources, c'est l'état qui nous intéresse, et seuls les changements qui nous séparent de l'état voulu doivent être appliqués.</li>
+<li>La méthode déclarative s'appuie sur du yaml, permettant ainsi à l'état de nos ressources d'être décrit et conservé dans des fichiers (on verra plus tard que c'est très intéressant).</li>
+<li>C'est bien plus riche, tout n'est pas faisable en impératif.</li>
+</ol>
+<p>Pour comprendre une autre différence entre impératif et déclaratif, déployez un pod :</p>
+<div class="highlight"><pre id="__code_20"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_20 &gt; code"></button><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-19-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>mynginx<span class="w"> </span>--image<span class="w"> </span>registry.takima.io/school/proxy/nginx
+</code></pre></div>
+<p>Maintenant, relancez la même commande :</p>
+<div class="highlight"><pre id="__code_21"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_21 &gt; code"></button><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-20-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>mynginx<span class="w"> </span>--image<span class="w"> </span>registry.takima.io/school/proxy/nginx
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il lors de cette deuxième création en impératif ?</p>
+</div>
+<p>Réalisez la même création avec la méthode déclarative :</p>
+<div class="highlight"><pre id="__code_22"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_22 &gt; code"></button><code tabindex="0"><a id="__codelineno-21-1" name="__codelineno-21-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-21-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>mynginx<span class="w"> </span>--image<span class="w"> </span>registry.takima.io/school/proxy/nginx<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>mynginx.yml
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-21-3"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>mynginx.yml
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il lors de cette deuxième création en déclaratif ?</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>De la même manière que pour la création de ressources en déclaratif à l'aide d'un fichier yaml, vous pouvez détruire les ressources à partir du même fichier yaml. Par exemple dans le cas précédent <code>kubectl delete -f mynginx.yml</code>
+Vous pouvez aussi regrouper plusieurs ressources dans un même yaml pour décrire une stack complète à créer ou détruire.</p>
+</div>
+<h3 id="replicaset">Replicaset</h3>
+<p>Ok, c’est bien : vous avez réussi à déployer un conteneur dans un Pod ! Mais qu'en est-il de la haute disponibilité ou de la scalabilité promise ?</p>
+<p>Pour scaler un applicatif, il faut tout simplement rajouter des <code>Pods</code> du même applicatif. Vous pourriez créer à la main plusieurs Pods avec la même image, mais cela ne serait pas très pratique. Il est beaucoup plus efficace de les regrouper au sein d’un groupe de ressources. C’est dans cet objectif que Kubernetes définit les <code>ReplicaSet</code> permettant de contrôler plusieurs pods d’un même applicatif (même image Docker) partageant les mêmes configs, les mêmes propriétés.</p>
+<p>Voici un exemple de ressource <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/" target="_blank">ReplicaSet</a>:</p>
+<div class="highlight"><pre id="__code_23"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_23 &gt; code"></button><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReplicaSet</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-replicaset</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-5"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-6"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-7"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-8"></a><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-9"></a><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-10"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-pod</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-11"></a><span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-12"></a><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-13"></a><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-14"></a><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-16"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.takima.io/school/proxy/nginx</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-17"></a><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-18"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-19"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-22-20"></a><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que remarquez-vous dans la description des properties <code>spec: template</code> ?
+À quoi sert le <code>selector: matchLabels</code> ?</p>
+</div>
+<p>Éditez le yaml <code>unicorn-front-replicaset.yaml</code> et déployez ce <code>ReplicaSet</code> sur votre cluster avec <code>kubectl apply</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Combien y a-t-il de pods déployés dans votre namespace ?</p>
+</div>
+<p>Maintenant, supprimez un <code>Pod</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il ?</p>
+</div>
+<p>Supprimez le <code>ReplicaSet</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il ?</p>
+</div>
+<h3 id="deployment">Deployment</h3>
+<p>Une ressource Kubernetes de type <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank">Deployment</a> permet de facilement piloter des <code>ReplicaSet</code>. En pratique, c'est typiquement avec cette ressource que sont déployées les applications.</p>
+<p>En effet, le <code>Deployment</code> gère la notion de cycle de vie des Pods (via les versions de <code>ReplicaSet</code> pilotés), notamment avec la définition de <code>RollingUpgrade</code> lors d’un déploiement de nouvelles versions. Cependant, il faut que la stratégie par défaut de <code>RollingUpdate</code> soit conservée (<code>.spec.strategy.type</code>) : cela facilite les rollbacks vers une version antérieure.</p>
+<p>Lors de la modification de la version d’une image Docker consommée dans un déploiement, un nouveau <code>ReplicaSet</code> sera créé. L’ancien <code>ReplicaSet</code> correspondant à l'ancienne version de l’image reste et les Pods sont vidés de l’ancien <code>ReplicaSet</code> vers le nouveau (<code>RollingUpgrade</code>). Ce transfert se fait au “fil de l'eau”, de manière à ce qu’il n’y ait pas d’interruption de service (par défaut Kubernetes tente de garder 75% des pods actifs). Dans le cas du TP, il ne détruit les <code>Pods</code> obsolètes qu’après que le nouveau <code>Pod</code> obtienne le statut Running.</p>
+<p>De cette manière, il est possible de facilement Rollback (processus inverse, les <code>Pods</code> allant du nouveau <code>ReplicaSet</code> vers l’ancien).</p>
+<p>La création d’un Deployment entraîne la création d’un ReplicaSet et donc la création d’un ou plusieurs Pods.</p>
+<p>La ressource <code>Deployment</code> est très proche de celle d’un <code>ReplicaSet</code> :</p>
+<div class="highlight"><pre id="__code_24"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_24 &gt; code"></button><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-deployment</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-5"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-6"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-7"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-8"></a><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-9"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-11"></a><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-12"></a><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-13"></a><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-14"></a><span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-15"></a><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-16"></a><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-17"></a><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-19"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.takima.io/school/proxy/nginx:1.7.9</span>
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-20"></a><span class="w">        </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-23-21" name="__codelineno-23-21" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-23-21"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Quels sont les changements par rapport au <code>ReplicaSet</code> ?</p>
+</div>
+<p>Éditez un yaml <code>unicorn-front-deployment.yaml</code> et déployez ce <code>Deployment</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Combien y a-t'il de <code>ReplicaSet</code> ? De <code>Pods</code> ?</p>
+</div>
+<p>Commande utile :</p>
+<div class="highlight"><pre id="__code_25"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_25 &gt; code"></button><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-24-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>all
+</code></pre></div>
+<p>Maintenant, la notion d’upgrade : c’est en pratique ce qu’il se passe lorsque l’on réalise un déploiement applicatif d’une nouvelle release (via un <code>Continuous Deployment</code> par exemple).</p>
+<p>Pour cela, changez la version de l’image nginx :</p>
+<p>Modifier une image docker dans un <code>deployment</code> revient à modifier cette ressource deployment.
+Pour modifier une ressource, vous avez 3 solutions :</p>
+<ol>
+<li>
+<p><code>kubectl set</code> ou <code>kubectl patch</code></p>
+<div class="highlight"><pre id="__code_26"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_26 &gt; code"></button><code tabindex="0"><a id="__codelineno-25-1" name="__codelineno-25-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-25-1"></a>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>image<span class="w"> </span>deployment/unicorn-front-deployment<span class="w"> </span>unicorn-front<span class="o">=</span>registry.takima.io/school/proxy/nginx:1.9.1<span class="w"> </span>--record
+</code></pre></div>
+</li>
+<li>
+<p>Éditez le fichier yaml en local et faire un <code>kubectl apply -f monfichier.yaml</code></p>
+<p>Il est possible également d'éditer le yaml définition de déploiement en changeant l’image et d'utiliser cette commande :</p>
+<div class="highlight"><pre id="__code_27"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_27 &gt; code"></button><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-26-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>...
+</code></pre></div>
+</li>
+<li>
+<p>Éditez directement la ressource avec <code>kubectl edit</code></p>
+<div class="highlight"><pre id="__code_28"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_28 &gt; code"></button><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-27-1"></a>kubectl<span class="w"> </span>edit<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+</code></pre></div>
+</li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>On préfèrera réaliser des updates de ressources en éditant son fichier yaml (ici unicorn-front-deployment.yaml) en utilisant donc la 2ème solution. Cela permet d'avoir la bonne version dans son dossier (fichier synchronisé avec ce qui est sur le cluster).</p>
+</div>
+<p>Regardez le statut du <code>RollingUpgrade</code> :</p>
+<div class="highlight"><pre id="__code_29"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_29 &gt; code"></button><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-28-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+</code></pre></div>
+<p>Si vous utilisez la commande rapidement, vous verrez le <code>RollingUpgrade</code> en cours. Si vous n'êtes pas assez rapide vous verrez juste un <code>succesfull</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Une fois terminé, combien y a-t-il de replicaset ? Combien y a-t-il de Pods ?
+Allez voir les logs des événements du déploiement avec <code>kubectl describe deployments</code>. Qu’observez-vous ?</p>
+</div>
+<p>Commande utile :</p>
+<div class="highlight"><pre id="__code_30"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_30 &gt; code"></button><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-29-1"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>deployments
+</code></pre></div>
+<h3 id="faire-un-rollback">Faire un Rollback</h3>
+<p>Mettez à jour votre déploiement avec une nouvelle version de l’image nginx.</p>
+<div class="highlight"><pre id="__code_31"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_31 &gt; code"></button><code tabindex="0"><a id="__codelineno-30-1" name="__codelineno-30-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-30-1"></a>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>image<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment<span class="w"> </span>unicorn-front<span class="o">=</span>registry.takima.io/school/proxy/nginx:1.91-falseimage<span class="w"> </span>--record<span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+<p>Observez votre <code>Deployment</code>, vos <code>Pods</code> et vos <code>ReplicaSets</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il ? Pourquoi ?</p>
+</div>
+<p>Dans ce cas de figure, l'objectif est de revenir à une version stable de <code>Deployment</code> (une version fonctionnelle avec une bonne image nginx).</p>
+<p>Pour commencer, vérifiez les révisions de ce déploiement :</p>
+<div class="highlight"><pre id="__code_32"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_32 &gt; code"></button><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-31-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span><span class="nb">history</span><span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Combien y a-t-il de révisions ? À quoi correspond le champ <code>CHANGE-CAUSE</code> ?</p>
+</div>
+<p>Vous pouvez afficher les détails de chaque révision (pour la révision 2 par exemple) avec cette commande :</p>
+<div class="highlight"><pre id="__code_33"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_33 &gt; code"></button><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-32-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span><span class="nb">history</span><span class="w"> </span>deployment.v1.apps/unicorn-front-deployment<span class="w"> </span>--revision<span class="o">=</span><span class="m">2</span>
+</code></pre></div>
+<p>Maintenant que la version stable est identifiée, voici la commande pour retourner à cette version :</p>
+<div class="highlight"><pre id="__code_34"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_34 &gt; code"></button><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-33-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>undo<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment<span class="w"> </span>--to-revision<span class="o">=</span><span class="m">2</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Pour revenir à la version précédente, il est aussi possible d'utiliser cette commande :</p>
+</div>
+<div class="highlight"><pre id="__code_35"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_35 &gt; code"></button><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-34-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>undo<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+</code></pre></div>
+<h3 id="mettre-a-lechelle">Mettre à l'échelle</h3>
+<p>Le déploiement de nouvelles versions (releases) est maintenant maîtrisé, mais dans l'hypothèse que le site internet est promu au journal télévisé et qu’un afflux conséquent de visiteurs se connectent dessus, que faire ? Il faut tout simplement déployer plus de <code>Pods</code> de l'applicatif. C’est ce qui est appelé <code>scaler</code> une application.</p>
+<p>Scalez le serveur nginx à 5 :</p>
+<div class="highlight"><pre id="__code_36"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_36 &gt; code"></button><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-35-1"></a>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment<span class="w"> </span>--replicas<span class="o">=</span><span class="m">5</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Encore une fois cette commande est pratique pour le cadre du TP. Mais en pratique, on préfèrera éditer son fichier
+yaml de deployment et mettre <code>replicas: 5</code> puis faire un <code>kubectl apply -f unicorn-front-deployment.yaml</code></p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Combien y a-t'il de <code>Pods</code>?</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Pour aller plus loin, Kubernetes implémente, si c’est activé, un système d’autoscaling appelé HPA (<code>Horizontal Pods Autoscaling</code>).
+Kubernetes se chargera de scaler automatiquement l'application en fonction de trigger définis par exemple sur la consommation CPU ou la RAM.
+Si vous êtes rapide une implémentation du HPA est proposé en bonus.</p>
+</div>
+<h3 id="mettre-en-standby-un-deployment">Mettre en standby un deployment</h3>
+<p>Mettez en pause un <code>Deployment</code> :</p>
+<div class="highlight"><pre id="__code_37"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_37 &gt; code"></button><code tabindex="0"><a id="__codelineno-36-1" name="__codelineno-36-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-36-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>pause<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-36-2"></a>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>image<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment<span class="w"> </span>unicorn-front<span class="o">=</span>registry.takima.io/school/proxy/nginx:1.20.2
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il au niveau <code>ReplicaSet</code> ?</p>
+</div>
+<div class="highlight"><pre id="__code_38"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_38 &gt; code"></button><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-37-1"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>resume<span class="w"> </span>deployment.v1.apps/unicorn-front-deployment
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il au niveau <code>ReplicaSet</code> ?</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>La pause permet de modifier le déploiement (encore une autre version, des properties du <code>Deployment</code> comme les limits/ressources) sans déclencher de <code>RollingUpgrade</code>.</p>
+</div>
+<h3 id="bonus">Bonus</h3>
+<p>Lorsque des applications sont déployées sous forme de containers (dans des Pods), il est indispensable de contrôler les ressources qu’elles consomment. Imaginez qu’un Pod se mette à consommer plusieurs dizaines de gigabytes de mémoire vive, quel serait l’impact sur les autres <code>Pods</code> tournant sur le même Worker Node (même serveur) ?</p>
+<p>Pour empêcher cela, Kubernetes implémente la notion de Ressources Management.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre id="__code_39"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_39 &gt; code"></button><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-1"></a><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-2"></a><span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-3"></a><span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"64Mi"</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-4"></a><span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"250m"</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-5"></a><span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-6"></a><span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"128Mi"</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-38-7"></a><span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"500m"</span>
+</code></pre></div>
+</div>
+<p>Ce block se place au niveau <code>spec.container</code>.  </p>
+<ul>
+<li>Le requests est la ressource qui est demandée au Worker Node pour allocation au conteneur.</li>
+<li>La limits est le maximum de mémoire et CPU consommable par le Pod.</li>
+</ul>
+<p>Implémentez une ressource management pour votre <code>Deployment</code> avec ces spécifications :</p>
+<ul>
+<li>Requests : mémoire : 32 Mo / CPU : 100m</li>
+<li>Limits : mémoire 256 Mo / CPU : 400m</li>
+</ul>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir les fichiers suivants dans le dossier <code>step-1</code> :
+</p><div class="highlight"><pre id="__code_40"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_40 &gt; code"></button><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-39-1"></a><span class="w">    </span>.
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-39-2"></a><span class="w">    </span>├──<span class="w"> </span>unicorn-front-deployment.yaml
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-39-3"></a><span class="w">    </span>├──<span class="w"> </span>unicorn-front-replicaset.yaml
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-39-4"></a><span class="w">    </span>└──<span class="w"> </span>unicorn-front-pod.yaml
+</code></pre></div><p></p>
+</div>
+<p>Mise en application :</p>
+<p>Dans cette mise en application, nous allons voir à quoi servent les ressources limites et quelle est l'impact de ces configurations sur le cycle de vie des containers.</p>
+<h4 id="impact-des-limites-memoire">Impact des limites Mémoire</h4>
+<p>Créez le pod suivant :</p>
+<div class="highlight"><pre id="__code_41"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_41 &gt; code"></button><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memory-limit</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-40-6" name="__codelineno-40-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-6"></a><span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-40-7" name="__codelineno-40-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memory-limit</span>
+<a id="__codelineno-40-8" name="__codelineno-40-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-8"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.takima.io/school/proxy/memory-stress</span>
+<a id="__codelineno-40-9" name="__codelineno-40-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-9"></a><span class="w">    </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-40-10" name="__codelineno-40-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-10"></a><span class="w">      </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-40-11" name="__codelineno-40-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-11"></a><span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"50Mi"</span>
+<a id="__codelineno-40-12" name="__codelineno-40-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-12"></a><span class="w">      </span><span class="nt">limits</span><span class="p">:</span>
+<a id="__codelineno-40-13" name="__codelineno-40-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-13"></a><span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"100Mi"</span>
+<a id="__codelineno-40-14" name="__codelineno-40-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-14"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"stress"</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-40-15" name="__codelineno-40-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-40-15"></a><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--vm"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"1"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"--vm-bytes"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"250M"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"--vm-hang"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"1"</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>Ce pod simule une application qui réclame 250M de RAM.</p>
+<p>Observez le comportement du pod :</p>
+<div class="highlight"><pre id="__code_42"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_42 &gt; code"></button><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-41-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>memory-limit
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que constatez-vous ? Pourquoi ?</p>
+</div>
+<p>Pour voir plus en détail :</p>
+<div class="highlight"><pre id="__code_43"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_43 &gt; code"></button><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-42-1"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>memory-limit
+</code></pre></div>
+<p>Vous devrez voir ceci :</p>
+<div class="highlight"><pre id="__code_44"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_44 &gt; code"></button><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-43-1"></a><span class="w"> </span>Last<span class="w"> </span>State:<span class="w">     </span>Terminated
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-43-2"></a><span class="w">      </span>Reason:<span class="w">       </span>OOMKilled
+</code></pre></div>
+<p>Détruisez votre pod</p>
+<div class="highlight"><pre id="__code_45"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_45 &gt; code"></button><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-44-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>memory-limit
+</code></pre></div>
+<h4 id="impact-des-limites-cpu">Impact des limites CPU</h4>
+<p>Créez le pod suivant :</p>
+<div class="highlight"><pre id="__code_46"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_46 &gt; code"></button><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span>
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu-limit</span>
+<a id="__codelineno-45-5" name="__codelineno-45-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-45-6" name="__codelineno-45-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-6"></a><span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-45-7" name="__codelineno-45-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu-limit</span>
+<a id="__codelineno-45-8" name="__codelineno-45-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-8"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.takima.io/school/proxy/cpu-stress</span>
+<a id="__codelineno-45-9" name="__codelineno-45-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-9"></a><span class="w">    </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-45-10" name="__codelineno-45-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-10"></a><span class="w">      </span><span class="nt">limits</span><span class="p">:</span>
+<a id="__codelineno-45-11" name="__codelineno-45-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-11"></a><span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"1"</span>
+<a id="__codelineno-45-12" name="__codelineno-45-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-12"></a><span class="w">      </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-45-13" name="__codelineno-45-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-13"></a><span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"0.5"</span>
+<a id="__codelineno-45-14" name="__codelineno-45-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-14"></a><span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<a id="__codelineno-45-15" name="__codelineno-45-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-15"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-cpus</span>
+<a id="__codelineno-45-16" name="__codelineno-45-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-45-16"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"2"</span>
+</code></pre></div>
+<p>Ce pod va simuler une demande d'utilisation de 2 vCPUs.</p>
+<p>Vérifiez le comportement du pod :</p>
+<div class="highlight"><pre id="__code_47"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_47 &gt; code"></button><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-46-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>cpu-limit
+</code></pre></div>
+<p>Vérifiez la consommation CPU du pod :</p>
+<div class="highlight"><pre id="__code_48"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_48 &gt; code"></button><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-47-1"></a>kubectl<span class="w"> </span>top<span class="w"> </span>pod<span class="w"> </span>cpu-limit
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que constatez-vous ? Pourquoi ?</p>
+</div>
+<p>Supprimez votre pod de test :</p>
+<div class="highlight"><pre id="__code_49"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_49 &gt; code"></button><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-48-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>cpu-limit
+</code></pre></div>
+<h2 id="etape-2-publication-serviceingress">Étape 2 : Publication Service/Ingress</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Vous pouvez maintenant vous placer dans le dossier <code>TP-kube-01/step-2</code> dans lequel vous placerez vos ressources yaml manipulées pendant cette étape. Gardez les ressources yaml du step-1 qui pourront vous servir de référence. </p>
+</div>
+<p>La plupart du temps l'applicatif qui tourne dans un <code>Pod</code> Kubernetes doit délivrer un service (que ce soit une Api, un Front ou une base de données, par exemple) et doit donc être requêté.</p>
+<p>Kubernetes possède une ressource spécifique appelée <code>Service</code>.</p>
+<h3 id="service">Service</h3>
+<p>Le <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank">Service</a> agit comme un Load Balancer qui va transmettre les requêtes qu’il reçoit vers les Pods auxquels il est rattaché. Ce rattachement se fait grâce aux Selector.</p>
+<p>Pour publier le Deployment unicorn-front-deployment de l'étape 1, éditez le fichier <code>unicorn-front-service.yaml</code> et déployez-le avec <code>kubectl apply</code>:</p>
+<div class="highlight"><pre id="__code_50"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_50 &gt; code"></button><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<a id="__codelineno-49-3" name="__codelineno-49-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-49-4" name="__codelineno-49-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-service</span>
+<a id="__codelineno-49-5" name="__codelineno-49-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-49-6" name="__codelineno-49-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-6"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-49-7" name="__codelineno-49-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-7"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front</span>
+<a id="__codelineno-49-8" name="__codelineno-49-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-8"></a><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-49-9" name="__codelineno-49-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<a id="__codelineno-49-10" name="__codelineno-49-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-10"></a><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-49-11" name="__codelineno-49-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-49-11"></a><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><code>spec.ports.port</code> est le port sur lequel le service va écouter.</li>
+<li><code>spec.ports.targetPort</code> est le port <strong>exposé</strong> par le conteneur sur le pod.</li>
+</ul>
+</div>
+<p>Important : Vérifiez que le targetPort du <strong>service</strong> correspond bien au <strong>containerPort</strong> du deployment (ou du pod). 
+Pour éviter de s'emmêler les pinceaux, vous pouvez aussi <strong>nommer</strong> le port dans votre <strong>deployment</strong> et l'appeler dans le service (<code>spec.template.spec.containers[].ports[].name</code>).</p>
+<p>Par défaut, les services sont de type <code>ClusterIp</code>, c'est-à-dire qu'ils sont accessibles depuis l'intérieur du cluster Kubernetes (et donc pas publiquement sur internet) mais seulement pour les autres applications qui tournent dans le même cluster Kubernetes.</p>
+<p>Un comportement idéal pour un Backend ou une base de données, mais non adapté pour le Front d’un portail Web qui doit être accessible à des utilisateurs.</p>
+<p>Pour exposer ces services, il existe plusieurs solutions. Voici les deux les plus courantes :  </p>
+<ul>
+<li>Soit faire un service de type <code>NodePort</code> (pour exposer le service sur l’ensemble des serveurs Worker du cluster Kubernetes) ou <code>LoadBalancer</code> (pour provisionner un load balancer sur le cloud provider sur lequel il tourne (AWS, GCP, AZURE pour citer les principaux).</li>
+<li>Soit faire un <code>Ingress</code> pour les expositions http / https. C’est la solution préconisée, car elle permet d'accéder aux applications en utilisant une même IP publique. L’ingress est en fait un Reverse Proxy (voir Api Gateway) et constitue le point d’entrée de tous les applicatifs à publier sur le Web. L’ingress transmet ensuite les requêtes au service de type ClusterIP.</li>
+</ul>
+<p>Pour résumer, voilà l’idée :
+</p><div class="highlight"><pre id="__code_51"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_51 &gt; code"></button><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-50-1"></a>UTILISATEUR → INGRESS → SERVICE → PODS
+</code></pre></div><p></p>
+<p>À noter que l’Ingress Controller utilise lui-même un service de type <code>LoadBalancer</code> ou <code>NodePort</code> partagé par tous les ingress qu’il va contrôler.</p>
+<h3 id="ingress">Ingress</h3>
+<p>Nous allons maintenant mettre en place un <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank">Ingress</a></p>
+<p>Si vous êtes curieux, vous aurez remarqué qu’il y a déjà un <code>IngressClass</code> dans le Cluster qui a été provisionné.
+Il s’agit d’un <a href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/" target="_blank">Ingress Controller</a> Nginx.</p>
+<p>Qui dit Reverse Proxy, dit bien sûr URL. En effet, le Reverse Proxy utilise un ensemble URL+Path pour savoir vers quel service il doit transmettre les requêtes. Un DNS a déjà été créé et vous a été transmis par mail.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Le DNS devrait être de la forme <code>cequevousvoulez.${namespace}.takima.school</code>
+Exemple pour le namespace johndoe : <code>unicorn.johndoe.takima.school</code></p>
+</div>
+<p>Éditez un fichier <code>unicorn-front-ingress.yaml</code> et déployez-le sur kubernetes :</p>
+<div class="highlight"><pre id="__code_52"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_52 &gt; code"></button><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ingress</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-ingress</span>
+<a id="__codelineno-51-5" name="__codelineno-51-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-51-6" name="__codelineno-51-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-6"></a><span class="w">  </span><span class="nt">ingressClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<a id="__codelineno-51-7" name="__codelineno-51-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-7"></a><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<a id="__codelineno-51-8" name="__codelineno-51-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">replace-with-your-url</span>
+<a id="__codelineno-51-9" name="__codelineno-51-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-9"></a><span class="w">      </span><span class="nt">http</span><span class="p">:</span>
+<a id="__codelineno-51-10" name="__codelineno-51-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-10"></a><span class="w">        </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-51-11" name="__codelineno-51-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-11"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">backend</span><span class="p">:</span>
+<a id="__codelineno-51-12" name="__codelineno-51-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-12"></a><span class="w">              </span><span class="nt">service</span><span class="p">:</span>
+<a id="__codelineno-51-13" name="__codelineno-51-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-13"></a><span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-service</span>
+<a id="__codelineno-51-14" name="__codelineno-51-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-14"></a><span class="w">                </span><span class="nt">port</span><span class="p">:</span>
+<a id="__codelineno-51-15" name="__codelineno-51-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-15"></a><span class="w">                  </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-51-16" name="__codelineno-51-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-16"></a><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<a id="__codelineno-51-17" name="__codelineno-51-17" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-51-17"></a><span class="w">            </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+</code></pre></div>
+<p>Essayez d'accéder au service.</p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir les fichiers suivants dans le dossier <code>step-2</code> :
+</p><div class="highlight"><pre id="__code_53"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_53 &gt; code"></button><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-52-1"></a><span class="w">    </span>.
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-52-2"></a><span class="w">    </span>├──<span class="w"> </span>unicorn-front-service.yaml
+<a id="__codelineno-52-3" name="__codelineno-52-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-52-3"></a><span class="w">    </span>└──<span class="w"> </span>unicorn-front-ingress.yaml
+</code></pre></div><p></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Il existe une autre approche utilisant des ressources kubernetes différentes pour publier un applicatif. Cette approche se nomme <code>Gateway API</code>.
+Elle se base sur 2 objets qui remplacent l'objet <code>Ingress</code> : 
+* la ressource <code>Gateway</code> qui définit le point d'accès qui permet de rentrer dans le cluster.
+* Les <code>Routes</code> (comme les <code>HTTPRoute</code> ou les <code>TLSRoute</code>) qui définissent les règles de routage qui enverront le trafic au bon endroit (au bon <code>Service</code> le plus souvent). Les <code>Routes</code> sont associées à une <code>Gateway</code> qui, elle-même, implémente une <code>GatewayClass</code>.
+La logique est donc la même qu'un <code>Ingress</code> (d'ailleurs la technologie sous-jacente est souvent la même : implémentation d'un reverse proxy). Mais la logique est bien plus souple ( routes par protocole, gateway cross namespaces, plus comprhensible dans la gestion des header par exemple) et surtout la séparation des objets permet de mieux définir les rôles : objet <code>Gateway</code> plutôt geré par un Cluster Operator; objet <code>HTTPRoute</code> plutôt developpeur applicatif.
+Pour la suite, on continuera d'utiliser la notion d'<code>Ingress</code> qui reste encore le plus répandu</p>
+</div>
+<h3 id="bonus_1">Bonus</h3>
+<p>Comme la sécurité, c'est important, il est possible d'utiliser HTTPS/TLS, mais pas d'inquiétude, les éventuels problèmes de certificats ont été réglés en amont grâce à CertManager. Le CertManager permet aux utilisateurs de créer un Ingress en demandant l'utilisation d'un <code>cluster-issuer</code> de certificat.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Nous avons mis deux cluster-issuers dans le Cluster :<br>
+ * Un appelé <code>letsencrypt-staging</code> qui vous permet de tout tester avec des certificats de non-production générés par letsencrypt.
+ * L'autre appelé <code>letsencrypt-prod</code> qui vous permet de vraiment générer un certificat Let's Encrypt valid.</p>
+</div>
+<p>Nous vous <strong>recommandons</strong> de d'abord faire vos tests avec <code>letsencrypt-staging</code></p>
+<div class="highlight"><pre id="__code_54"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_54 &gt; code"></button><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-1"></a><span class="w"> </span><span class="nt">annotations</span><span class="p">:</span>
+<a id="__codelineno-53-2" name="__codelineno-53-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-2"></a><span class="w">   </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-staging</span>
+<a id="__codelineno-53-3" name="__codelineno-53-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-3"></a><span class="w">   </span><span class="nt">kubernetes.io/tls-acme</span><span class="p">:</span><span class="w"> </span><span class="s">'true'</span>
+<a id="__codelineno-53-4" name="__codelineno-53-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-4"></a><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-ingress</span>
+<a id="__codelineno-53-5" name="__codelineno-53-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-53-6" name="__codelineno-53-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-6"></a><span class="w"> </span><span class="nt">ingressClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<a id="__codelineno-53-7" name="__codelineno-53-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-7"></a><span class="w"> </span><span class="nt">rules</span><span class="p">:</span>
+<a id="__codelineno-53-8" name="__codelineno-53-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-8"></a><span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">replace-with-your-url</span>
+<a id="__codelineno-53-9" name="__codelineno-53-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-9"></a><span class="w">   </span><span class="nt">http</span><span class="p">:</span>
+<a id="__codelineno-53-10" name="__codelineno-53-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-10"></a><span class="w">     </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-53-11" name="__codelineno-53-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-11"></a><span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">backend</span><span class="p">:</span>
+<a id="__codelineno-53-12" name="__codelineno-53-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-12"></a><span class="w">         </span><span class="nt">service</span><span class="p">:</span>
+<a id="__codelineno-53-13" name="__codelineno-53-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-13"></a><span class="w">           </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-service</span>
+<a id="__codelineno-53-14" name="__codelineno-53-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-14"></a><span class="w">           </span><span class="nt">port</span><span class="p">:</span>
+<a id="__codelineno-53-15" name="__codelineno-53-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-15"></a><span class="w">             </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-53-16" name="__codelineno-53-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-16"></a><span class="w">       </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<a id="__codelineno-53-17" name="__codelineno-53-17" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-17"></a><span class="w">       </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<a id="__codelineno-53-18" name="__codelineno-53-18" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-18"></a><span class="w"> </span><span class="nt">tls</span><span class="p">:</span>
+<a id="__codelineno-53-19" name="__codelineno-53-19" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-19"></a><span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span>
+<a id="__codelineno-53-20" name="__codelineno-53-20" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-20"></a><span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">replace-with-your-url</span>
+<a id="__codelineno-53-21" name="__codelineno-53-21" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-53-21"></a><span class="w">   </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unicorn-front-tls</span>
+</code></pre></div>
+<p>Vérifiez l’accès en SSL via votre browser ou via <code>curl</code> / <code>openssl s_client -connect</code>.</p>
+<p>Letsencrypt limite le nombre de requêtes pour générer des certificats de production.
+Pour ne pas se faire blacklister, nous avons créé un <code>Wildcard certificate</code> pour chacun d'entre vous.
+Pour l'utiliser plus besoin de CertManager ni de TLS acme.
+Il suffit d'utiliser le secretName que nous vous avons fourni et qui contient le Wildcard, c'est-à-dire : <code>app-wildcard</code></p>
+<p>Dans votre Ingress, supprimez les annotations <code>cert-manager.io/cluster-issuer: letsencrypt-staging</code> et <code>kubernetes.io/tls-acme: 'true'</code></p>
+<p>Faites un <code>kubectl get secrets</code> pour récupérer le nom du secret wildcard puis ajoutez ce nom dans votre Ingress : au niveau <code>secretName:</code>, à la place de <code>unicorn-front-tls</code></p>
+<p>Nous verrons un peu plus tard comment utiliser les secrets.</p>
+<h3 id="mise-en-situation">Mise en situation</h3>
+<p>Pour bien se rendre compte du fonctionnement du Load Balancing, un Webservice simple a été préparé. Tout d'abord, commencez par nettoyer votre <code>Namespace</code> :</p>
+<div class="highlight"><pre id="__code_55"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_55 &gt; code"></button><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-54-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>--all<span class="w"> </span>deployments
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-54-2"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>--all<span class="w"> </span>services
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-54-3"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>--all<span class="w"> </span>ingress
+</code></pre></div>
+<p>Éditez un nouveau <code>Deployment</code> avec l’image suivante pour avoir 3 <code>Pods</code> <code>registry.gitlab.com/takima-school/images/simple-website:latest</code>. Vous pouvez nommer le fichier <code>hello-deployment.yaml</code></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Cette image contient un node qui expose ses services sur le port <strong>3000</strong>.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il ? Pourquoi ?</p>
+</div>
+<p>Vous utiliserez la plupart du temps des containers provenant de <code>Container Registry</code> privés, peu d’entreprises exposant publiquement leurs containers. Il faut alors gérer les accès au Registry privé.</p>
+<p>Pour cela, il convient de créer une nouvelle ressource de type <code>Secret</code> dans Kubernetes. Cette ressource sera décrite plus en détail ultérieurement.</p>
+<p>Pour le moment, créez la ressource avec les informations que vous avez reçues par mail :</p>
+<div class="highlight"><pre id="__code_56"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_56 &gt; code"></button><code tabindex="0"><a id="__codelineno-55-1" name="__codelineno-55-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-55-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>docker-registry<span class="w"> </span>takima-school-registry<span class="w"> </span>--docker-server<span class="o">=</span>registry.gitlab.com<span class="w"> </span>--docker-username<span class="o">=</span>readregcred<span class="w"> </span>--docker-password<span class="o">=</span>LE_MOT_DE_PASSE_QUE_VOUS_AVEZ_RECU_PAR_MAIL
+</code></pre></div>
+<p>Puis modifiez votre <code>Deployment</code> pour indiquer que vous souhaitez utiliser ce Secret pour pull l’image.</p>
+<p>Pour cela, éditez votre yaml, ajoutez y ce block au même niveau que <code>spec.template.spec</code>:</p>
+<div class="highlight"><pre id="__code_57"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_57 &gt; code"></button><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-56-1"></a><span class="nt">imagePullSecrets</span><span class="p">:</span>
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-56-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">takima-school-registry</span>
+</code></pre></div>
+<p>Une fois le <code>Deployment</code> réalisé (contrôlez que les <code>Pods</code> ont bien le status running), créez un <code>Service</code> ainsi qu’un
+<code>Ingress</code> pour accéder à la Web App (nouveau fichier <code>hello-service.yaml</code> et <code>hello-ingress.yaml</code>).
+Si vous ne l'avez pas fait dans votre <code>Deployment</code>, scalez votre <code>Deployment</code> à 3.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Décrivez ce que répond la Web App ?
+Actualisez votre page avec CTRL + F5. Que se passe-t-il ?</p>
+</div>
+<p>Maintenant, nous allons ajouter des configs de variables d'environement, celles-ci pourront être utilisées dans les containers (et donc dans les applicatifs qui tournent dessus). Ajoutez les variables suivantes dans le deployment (au niveau <code>spec.template.spec.container.env</code>):</p>
+<div class="highlight"><pre id="__code_58"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_58 &gt; code"></button><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">K8S_NODE_NAME</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-2"></a><span class="w">  </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-3"></a><span class="w">    </span><span class="nt">fieldRef</span><span class="p">:</span>
+<a id="__codelineno-57-4" name="__codelineno-57-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-4"></a><span class="w">      </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spec.nodeName</span>
+<a id="__codelineno-57-5" name="__codelineno-57-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-5"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">K8S_POD_NAME</span>
+<a id="__codelineno-57-6" name="__codelineno-57-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-6"></a><span class="w">  </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-57-7" name="__codelineno-57-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-7"></a><span class="w">    </span><span class="nt">fieldRef</span><span class="p">:</span>
+<a id="__codelineno-57-8" name="__codelineno-57-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-8"></a><span class="w">      </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metadata.name</span>
+<a id="__codelineno-57-9" name="__codelineno-57-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-9"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">K8S_POD_IP</span>
+<a id="__codelineno-57-10" name="__codelineno-57-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-10"></a><span class="w">  </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-57-11" name="__codelineno-57-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-11"></a><span class="w">    </span><span class="nt">fieldRef</span><span class="p">:</span>
+<a id="__codelineno-57-12" name="__codelineno-57-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-57-12"></a><span class="w">      </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status.podIP</span>
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que constatez-vous sur le navigateur ?</p>
+</div>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir les nouveaux fichiers suivants dans le dossier <code>step-2</code> :
+</p><div class="highlight"><pre id="__code_59"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_59 &gt; code"></button><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-58-1"></a><span class="w">    </span>.
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-58-2"></a><span class="w">    </span>├──<span class="w"> </span>hello-deployement.yaml
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-58-3"></a><span class="w">    </span>├──<span class="w"> </span>hello-service.yaml
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-58-4"></a><span class="w">    </span>└──<span class="w"> </span>hello-ingress.yaml
+</code></pre></div><p></p>
+</div>
+<h2 id="etape-3-configmapsecret">Étape 3 : ConfigMap/Secret</h2>
+<p>La plupart du temps lorsque qu'une application est déployée, vous aurez besoin de lui fournir une configuration.
+Par exemple, vous lui indiquerez des valeurs pour les variables d’environnement (de la même manière que le <code>.env</code> du Docker Compose).
+Bien qu’il soit possible de configurer cela “en dur” dans le Pod ou le Deployment, il est d'adage que le concept de hardcoder des configs envoie droit à la catastrophe.
+Dans Kubernetes, une ressource est dédiée pour éviter cette destinée : il s’agit du <a href="https://kubernetes.io/docs/concepts/configuration/configmap/" target="_blank">ConfigMap</a>.</p>
+<p>La plupart du temps un <code>ConfigMap</code> défini un couple Key/Value qui sera ensuite utilisé dans le <code>Pod</code> pour configurer des variables d'environnement. Mais vous pourrez aussi définir un fichier de configuration entier et le monter comme un volume dans votre <code>Pod</code>.</p>
+<h3 id="exemple">Exemple :</h3>
+<p>Quelque chose est volontairement caché dans la Web App de démo. En effet, il est possible de lui définir une variable d’environnement nommée CUSTOM_COLOR pour forcer la couleur du background.</p>
+<p>Pour cela, il faut :</p>
+<ul>
+<li>Créer un <code>ConfigMap</code> en configurant cette variable, nouveau fichier <code>hello-config.yaml</code>. </li>
+<li>Consommer la variable dans le <code>Deployment</code>.</li>
+</ul>
+<div class="highlight"><pre id="__code_60"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_60 &gt; code"></button><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web-app</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-5"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-59-6" name="__codelineno-59-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-6"></a><span class="w">  </span><span class="c1"># property-like keys; each key maps to a simple value</span>
+<a id="__codelineno-59-7" name="__codelineno-59-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-59-7"></a><span class="w">  </span><span class="nt">color</span><span class="p">:</span><span class="w"> </span><span class="s">"#200"</span>
+</code></pre></div>
+<p>Le bloc suivant est à placer dans le <code>Deployment</code> au niveau du template container (au même niveau que le name ou l’image du container utilisé dans le deployment <code>spec.template.spec.container</code>). Attention à l'indentation du yaml !</p>
+<div class="highlight"><pre id="__code_61"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_61 &gt; code"></button><code tabindex="0"><a id="__codelineno-60-1" name="__codelineno-60-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-1"></a><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CUSTOM_COLOR</span><span class="w"> </span><span class="c1"># Vrai key de la variable d'env. Peut-être différent de la valeur dans le configmap</span>
+<a id="__codelineno-60-3" name="__codelineno-60-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-3"></a><span class="w">    </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-60-4" name="__codelineno-60-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-4"></a><span class="w">      </span><span class="nt">configMapKeyRef</span><span class="p">:</span>
+<a id="__codelineno-60-5" name="__codelineno-60-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-5"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web-app</span><span class="w">  </span><span class="c1"># Nom du configmap</span>
+<a id="__codelineno-60-6" name="__codelineno-60-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-60-6"></a><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">color</span><span class="w">     </span><span class="c1"># nom de la clef dans le configmap</span>
+</code></pre></div>
+<h3 id="secret">Secret</h3>
+<p>Un <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank">Secret</a> s’utilise comme un <code>ConfigMap</code> mais sera masqué dans le cluster Kubernetes et vous pourrez appliquer des droits différents sur ces ressources pour avoir des restrictions d’accès. D’ailleurs, pour le créer, vous devez encoder les données en Base64.</p>
+<p>Deux solutions :<br>
+ 1. Soit directement en Command line avec kubectl create. 
+    </p><div class="highlight"><pre id="__code_62"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_62 &gt; code"></button><code tabindex="0"><a id="__codelineno-61-1" name="__codelineno-61-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-61-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>my-secret<span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">username</span><span class="o">=</span>user<span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span><span class="s1">'test123*'</span>
+</code></pre></div>
+    <em>Remarque : dans ce cas, on ne passe pas les data en base 64, la commande s'occupe de cela.</em><br>
+ 2. Soit via un yaml, mais attention, dans ce cas les valeurs des data doivent être en Base64. Il faut donc convertir les valeurs au préalable :<br>
+<div class="highlight"><pre id="__code_63"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_63 &gt; code"></button><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-62-1"></a><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s1">'user'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-62-2"></a><span class="nv">dXNlcg</span><span class="o">==</span>
+<a id="__codelineno-62-3" name="__codelineno-62-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-62-3"></a><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s1">'test123*'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64
+<a id="__codelineno-62-4" name="__codelineno-62-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-62-4"></a><span class="nv">dGVzdDEyMyo</span><span class="o">=</span>
+</code></pre></div><p></p>
+<p>Puis, le yaml peut être édité, nouveau fichier <code>hello-secret.yaml</code> :</p>
+<div class="highlight"><pre id="__code_64"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_64 &gt; code"></button><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-63-2" name="__codelineno-63-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<a id="__codelineno-63-3" name="__codelineno-63-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-63-4" name="__codelineno-63-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello-secret</span>
+<a id="__codelineno-63-5" name="__codelineno-63-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-5"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<a id="__codelineno-63-6" name="__codelineno-63-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-6"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-63-7" name="__codelineno-63-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-7"></a><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YWRtaW4=</span>
+<a id="__codelineno-63-8" name="__codelineno-63-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-63-8"></a><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MWYyZDFlMmU2N2Rm</span>
+</code></pre></div>
+<p>Il ne reste plus qu'à kubectl apply le fichier. Vérifier avec Lens par exemple que le secret est créé.
+Avec Lens, vous pouvez visualiser le contenu du secret en cliquant sur l'œil.</p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devriez avoir les fichiers suivants dans le dossier <code>step-3</code> :
+</p><div class="highlight"><pre id="__code_65"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_65 &gt; code"></button><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-64-1"></a><span class="w">    </span>.
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-64-2"></a><span class="w">    </span>├──<span class="w"> </span>hello-config.yaml
+<a id="__codelineno-64-3" name="__codelineno-64-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-64-3"></a><span class="w">    </span>└──<span class="w"> </span>hello-secret.yaml
+</code></pre></div><p></p>
+</div>
+<h3 id="bonus_2">Bonus</h3>
+<h4 id="bonus-1-rendre-sa-couleur-secrete">Bonus 1 : Rendre sa couleur secrète</h4>
+<p>Afin d'éviter que votre couleur préférée soit connue de tous, passez la variable du code couleur en mode <code>Secret</code>. Bonne chance !</p>
+<h4 id="bonus-2-mon-pod-est-il-en-vie">Bonus 2 : Mon pod est-il en vie ?</h4>
+<p>Il peut arriver parfois que notre application démarre et soit capable de fonctionner de manière nominale pendant un temps
+avant de voir son service se dégrader (apparition d'un deadlock qui empêche l'application de fonctionner normalement).</p>
+<p>Ce genre d'erreur peut survenir sans pour autant que votre application s'arrête d'elle-même. Dans ce cas-là, il convient de
+fournir à kubernetes un moyen de savoir si l'application devrait être redémarrée ou non. </p>
+<p>Cela tombe bien puisque notre application <strong>hello-world</strong> propose un endpoint sur <code>/health</code> donnant l'information sur son
+état courant. Paramétrez votre <code>Deployment</code> pour qu'il fasse un appel régulier sur ce fameux endpoint <code>/health</code>. Pour vérifier
+que tout marche bien, vous pouvez changer l'état du healthcheck en faisant une requête <strong>GET</strong> sur l'endpoint <code>/kill</code>. Une fois
+fait, l'un de vos pods devraient redémarrer.</p>
+<h4 id="bonus-3-let-my-kubernetes-scale">Bonus 3 : Let my kubernetes Scale !!!</h4>
+<p>Comme promis, voici une mise en pratique du <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/" target="_blank">HPA</a>,
+la mise à l'échelle automatique d'un déploiement.
+Pour cela, commencez par supprimer vos ressources <code>déployment</code> existantes (pour avoir de la visibilité).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Le <strong>HPA</strong> se base sur les ressources request définies dans votre déploiement.
+En effet, on va définir un pourcentage basé sur ces ressources.
+Nous vous conseillons donc de réaliser le bonus de l'étape 1, qui traite de cela avant de continuer.</p>
+</div>
+<p>Nous avons préparé pour vous un petit applicatif qui simule une charge à chaque fois qu'il reçoit une requête http.</p>
+<p>Commencez par éditer et deployer le fichier <code>hpa-deployment.yaml</code> avec :</p>
+<ul>
+<li>image : <code>registry.gitlab.com/takima-school/images/hpa:latest</code></li>
+<li>replicas à <code>1</code></li>
+<li>nom <code>hpa</code> et label <code>app: hpa</code></li>
+<li>les ressources suivantes :</li>
+</ul>
+<div class="highlight"><pre id="__code_66"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_66 &gt; code"></button><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-65-1"></a><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-65-2" name="__codelineno-65-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-65-2"></a><span class="w">          </span><span class="nt">limits</span><span class="p">:</span>
+<a id="__codelineno-65-3" name="__codelineno-65-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-65-3"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span>
+<a id="__codelineno-65-4" name="__codelineno-65-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-65-4"></a><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-65-5" name="__codelineno-65-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-65-5"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+</code></pre></div>
+<ul>
+<li>la mise en place du <code>imagePullSecrets</code> car on pull un registry privé.</li>
+</ul>
+<p>Éditez et déployez ensuite le service correspondant :</p>
+<ul>
+<li>targetPort: 80</li>
+<li>Port: 80</li>
+<li>nom: hpa</li>
+</ul>
+<p>Voilà le socle est prêt pour mettre à l'échelle notre application :</p>
+<ul>
+<li>Mettez en place le hpa sur le déploiement :</li>
+</ul>
+<p><code>kubectl autoscale deployment hpa --cpu-percent=50 --min=1 --max=10</code></p>
+<p>Ici, on demande de scaler l'application dès que la ressource cpu dépasse 50% du request (ici donc 100m cpu).</p>
+<p>Vérifiez l'état du <strong>HPA</strong> (on peut aussi le voir dans LENS)</p>
+<div class="highlight"><pre id="__code_67"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_67 &gt; code"></button><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-66-1"></a>laptop-3007:~$ kubectl get hpa
+<a id="__codelineno-66-2" name="__codelineno-66-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-66-2"></a>NAME   REFERENCE        TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+<a id="__codelineno-66-3" name="__codelineno-66-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-66-3"></a>hpa    Deployment/hpa   0%/50%    1         10        1          105s
+</code></pre></div>
+<p>On voit qu'il n'est pas très chargé. Mais cela ne va pas durer !</p>
+<p>Pour générer du traffic rien de tel qu'un pod qui attaque le service. Sur un autre terminal, lancez cette commande et laissez la tourner en fond :</p>
+<p><code>kubectl run -i --tty load-generator --rm --image=registry.takima.io/school/proxy/busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://hpa; done"</code></p>
+<p>Puis, commencez à observer la charge monter sur votre déploiement en lançant plusieurs <code>kubectl get hpa</code> ou avec un <code>watch</code>(ici à 160%)</p>
+<div class="highlight"><pre id="__code_68"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_68 &gt; code"></button><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-67-1"></a>laptop-3007:~$ kubectl get hpa
+<a id="__codelineno-67-2" name="__codelineno-67-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-67-2"></a>NAME   REFERENCE        TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
+<a id="__codelineno-67-3" name="__codelineno-67-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-67-3"></a>hpa    Deployment/hpa   160%/50%   1         10        1          108s
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Observez ce qu'il se passe. Que constatez-vous ?</p>
+</div>
+<p>Voici ce qui est attendu :</p>
+<p><img alt="scaling hpa" src="./Day 1 - Discovery - Kubernetes in action_files/hpa_scale.png"></p>
+<p>On voit bien notre applicatif scaler à 6 pods. On le constate aussi si l'on fait un <code>kubectl get pods</code> d'ailleurs.</p>
+<p>De plus nous pouvons lancer un <code>kubectl describe hpa hpa</code>  pour regarder les logs du hpa et ces événements :</p>
+<p><img alt="scaling hpa" src="./Day 1 - Discovery - Kubernetes in action_files/hpa_scale_logshpa.png"></p>
+<p>Les logs parlent d'eux-mêmes !</p>
+<p>Maintenant, coupez le process qui tourne en fond sur votre deuxième terminal.</p>
+<p>On remarque que la charge a diminué avec un <code>kubectl get hpa</code></p>
+<p>Et au bout de quelques minutes le hpa devrait downscale l'applicatif. Par défault, pour des raisons de stabilisation, le downscaling ne se fait qu'après 300 secondes sous le déclencheur (dans notre cas 50% de cpu request). Attendez donc un peu et vérifiez que le déploiement repasse à 1 replicas.</p>
+<p><img alt="scaling hpa" src="./Day 1 - Discovery - Kubernetes in action_files/hpa_downscale_logshpa.png"></p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devriez avoir 2 nouveaux fichiers dans le dossier <code>hpa</code> :
+</p><div class="highlight"><pre id="__code_69"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_69 &gt; code"></button><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-68-1"></a><span class="w">    </span>.
+<a id="__codelineno-68-2" name="__codelineno-68-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-68-2"></a><span class="w">    </span>├──<span class="w"> </span>hpa-deployment.yaml
+<a id="__codelineno-68-3" name="__codelineno-68-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-68-3"></a><span class="w">    </span>└──<span class="w"> </span>hpa-service.yaml
+</code></pre></div><p></p>
+</div>
+<h4 id="bonus-4-control-my-traffic">Bonus 4: Control my traffic !!!</h4>
+<p>Ici, nous allons voir comment utiliser une nouvelle ressource pour contrôler finement les flux entre les Pods. Cette ressource se nomme <code>NetworkPolicy</code>.</p>
+<p>Par défaut comme vous l'avez surement déjà constaté, tout est open ! Et parfois (voire souvent) ce n'est pas une bonne pratique.</p>
+<p>Attention : la NetworkPolicy est une fonctionnalité qui n'est pas prise en charge par tous les <strong>CNI (Controller Network Interface)</strong>.
+Comme le CNI n'est pas l'objet de cette formation, sachez simplement que c'est une API de gestion du réseau d'un cluster K8S. Il existe une multitude d'implémentations, ici, nous avons provisionné un cluster avec un CNI qui prend en charge les NetworkPolicies (<strong>Calico</strong> en l'occurrence).</p>
+<p>Pour comprendre comment cela fonctionne, commencez par deployer une ressource que vous maitrisez sur le bout des doigts : un <code>deployment</code>.</p>
+<div class="highlight"><pre id="__code_70"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_70 &gt; code"></button><code tabindex="0"><a id="__codelineno-69-1" name="__codelineno-69-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-69-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>deployment<span class="w"> </span>nginx<span class="w"> </span>--image<span class="o">=</span>registry.takima.io/school/proxy/nginx:1.7.9
+</code></pre></div>
+<p>Ensuite, exposez ce deployment à travers un service : </p>
+<div class="highlight"><pre id="__code_71"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_71 &gt; code"></button><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-70-1"></a>kubectl<span class="w"> </span>expose<span class="w"> </span>deployment<span class="w"> </span>nginx<span class="w"> </span>--port<span class="o">=</span><span class="m">80</span>
+</code></pre></div>
+<p>Pour tester les accès en interne, on lance la boite à outils busybox :</p>
+<div class="highlight"><pre id="__code_72"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_72 &gt; code"></button><code tabindex="0"><a id="__codelineno-71-1" name="__codelineno-71-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-71-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>busybox<span class="w"> </span>--rm<span class="w"> </span>-ti<span class="w"> </span>--image<span class="o">=</span>registry.takima.io/school/proxy/busybox:1.28<span class="w"> </span>--<span class="w"> </span>/bin/sh
+</code></pre></div>
+<p>Cela va vous ouvrir un shell dans votre pod busybox (qui se trouve dans le même namespace que votre nginx).
+Vous pouvez tester que vous pouvez accéder à votre nginx :</p>
+<div class="highlight"><pre id="__code_73"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_73 &gt; code"></button><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-72-1"></a>wget<span class="w"> </span>--spider<span class="w"> </span>--timeout<span class="o">=</span><span class="m">1</span><span class="w"> </span>nginx
+</code></pre></div>
+<p>La connection doit passer (car comme on l'a dit par default si on ne fait rien, c'est ouvert).</p>
+<p>Maintenant, quittez votre shell busybox (le pod va s'autodétruire !!)</p>
+<p>Appliquez une NetworkPolicy qui va limiter les accès au nginx :</p>
+<div class="highlight"><pre id="__code_74"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_74 &gt; code"></button><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<a id="__codelineno-73-2" name="__codelineno-73-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NetworkPolicy</span>
+<a id="__codelineno-73-3" name="__codelineno-73-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-73-4" name="__codelineno-73-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">access-nginx</span>
+<a id="__codelineno-73-5" name="__codelineno-73-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-73-6" name="__codelineno-73-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-6"></a><span class="w">  </span><span class="nt">podSelector</span><span class="p">:</span>
+<a id="__codelineno-73-7" name="__codelineno-73-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<a id="__codelineno-73-8" name="__codelineno-73-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-8"></a><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<a id="__codelineno-73-9" name="__codelineno-73-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-9"></a><span class="w">  </span><span class="nt">ingress</span><span class="p">:</span>
+<a id="__codelineno-73-10" name="__codelineno-73-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span>
+<a id="__codelineno-73-11" name="__codelineno-73-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">podSelector</span><span class="p">:</span>
+<a id="__codelineno-73-12" name="__codelineno-73-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-12"></a><span class="w">        </span><span class="nt">matchLabels</span><span class="p">:</span>
+<a id="__codelineno-73-13" name="__codelineno-73-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-73-13"></a><span class="w">          </span><span class="nt">access</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
+</code></pre></div>
+<p>Re-testez la même connexion au nginx via busybox :</p>
+<div class="highlight"><pre id="__code_75"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_75 &gt; code"></button><code tabindex="0"><a id="__codelineno-74-1" name="__codelineno-74-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-74-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>busybox<span class="w"> </span>--rm<span class="w"> </span>-ti<span class="w"> </span>--image<span class="o">=</span>registry.takima.io/school/proxy/busybox:1.28<span class="w"> </span>--<span class="w"> </span>/bin/sh
+</code></pre></div>
+<div class="highlight"><pre id="__code_76"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_76 &gt; code"></button><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-75-1"></a>wget<span class="w"> </span>--spider<span class="w"> </span>--timeout<span class="o">=</span><span class="m">1</span><span class="w"> </span>nginx
+</code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que constatez-vous ?</p>
+</div>
+<p>Quittez votre busybox shell.</p>
+<p>Maintenant, ajoutez le label permettant à votre pod busybox de matcher la règle spécifiée dans la <code>NetworkPolicy</code> et re-testez la connection :</p>
+<div class="highlight"><pre id="__code_77"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_77 &gt; code"></button><code tabindex="0"><a id="__codelineno-76-1" name="__codelineno-76-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-76-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>busybox<span class="w"> </span>--rm<span class="w"> </span>-ti<span class="w"> </span>--labels<span class="o">=</span><span class="s2">"access=true"</span><span class="w"> </span>--image<span class="o">=</span>registry.takima.io/school/proxy/busybox:1.28<span class="w"> </span>--<span class="w"> </span>/bin/sh
+</code></pre></div>
+<p>Testez la connection :</p>
+<div class="highlight"><pre id="__code_78"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_78 &gt; code"></button><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/#__codelineno-77-1"></a>wget<span class="w"> </span>--spider<span class="w"> </span>--timeout<span class="o">=</span><span class="m">1</span><span class="w"> </span>nginx
+</code></pre></div>
+<h4 id="bonus-5-run-on-one-az">Bonus 5: Run on one AZ</h4>
+<p>Le but ici est d'utiliser le concept d'<code>affinity</code> pour faire tourner les pods de notre déployment sur un seul AZ</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Qu'est-ce qu'une <code>Avaibility Zone</code> au niveau infrastructure ?</p>
+</div>
+<p>Ici, on a 3 AZ dans la région de Paris sur AWS (région <code>eu-west-3</code>)</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Faire en sorte de tourner sur une seule AZ, par exemple <code>eu-west-3a</code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">indice</p>
+<p>les serveurs du cluster kubernetes ont une clef <code>topology.kubernetes.io/zone</code> qui définit sur quel AZ ils tournent.</p>
+</div>
+<p>Pour valider cela, vérifiez avec un intervenant que tes pods tournent bien sûr les bons serveurs</p>
+<h4 id="bonus-6-run-one-pod-on-each-server">Bonus 6: Run one pod on each server</h4>
+<p>Créez un déployment qui va faire tourner vos pods sur chacun des worker nodes du cluster kubernetes avec l'image <code>registry.takima.io/school/proxy/nginx:1.7.9</code></p>
+<div class="admonition note">
+<p class="admonition-title">indice</p>
+<p>il existe une ressource spéciale qui fait cela, à toi de la trouver.</p>
+</div>
+<h4 id="bonus-7-change-my-rolling-update-policy">Bonus 7: Change my rolling update policy</h4>
+<p>Par défaut, vous utilisez une policy pour vos upgrades des déploiements. Changez cette policy pour avoir un type <code>recreate</code></p>
+<p>Utilisez l'image <code>registry.takima.io/school/proxy/nginx:1.7.9</code> avec un replicas à <code>5</code></p>
+<p>Mettez à jour votre deployment vers une nouvelle image nginx : <code>registry.takima.io/school/proxy/nginx:1.9.1</code></p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>que se passe-t-il au niveau de vos pods pendant l'update ?</p>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Briefing" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Briefing
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-footer__link md-footer__link--next" aria-label="Next: Day 2 - Deep Dive" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Day 2 - Deep Dive
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2023 - 2024 Takima
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.c7dec7e7.min.js"}</script>
+    
+    
+      <script src="./Day 1 - Discovery - Kubernetes in action_files/bundle.da79ceb7.min.js"></script>
+      
+    
+  
+</body></html>

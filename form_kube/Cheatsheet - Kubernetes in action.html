@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/ -->
+<html lang="en" class="js-focus-visible js" data-js-focus-visible=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style></style>
+    
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-8.1.1">
+    
+    
+      
+        <title>Cheatsheet - Kubernetes in action</title>
+      
+    
+    
+      <link rel="stylesheet" href="./Cheatsheet - Kubernetes in action_files/main.23b6d78a.min.css">
+      
+        
+        <link rel="stylesheet" href="./Cheatsheet - Kubernetes in action_files/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#e92063">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="./Cheatsheet - Kubernetes in action_files/css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="pink" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#cheatsheet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-header__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Cheatsheet - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kubernetes in action
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cheatsheet
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">Type to start searching</div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-tabs__link">
+      Briefing
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-tabs__link">
+        TP
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-tabs__link md-tabs__link--active">
+      Cheatsheet
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-nav__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Cheatsheet - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    Kubernetes in action
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-nav__link">
+        Briefing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2">
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          TP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="TP" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          TP
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-nav__link">
+        Day 1 - Discovery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-nav__link">
+        Day 2 - Deep Dive
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/" class="md-nav__link">
+        Day 3 - GitOps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-nav__link">
+        Day 4 - Monitoring
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Cheatsheet
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-nav__link md-nav__link--active">
+        Cheatsheet
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#mise-en-place-de-lautocompletion" class="md-nav__link">
+    Mise en place de l'autocompletion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#creation-dune-ressource-a-partir-dun-fichier-yaml" class="md-nav__link">
+    Création d'une ressource à partir d'un fichier YAML
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#suppression-dune-ressource" class="md-nav__link">
+    Suppression d'une ressource
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#rentrer-dans-un-pod" class="md-nav__link">
+    Rentrer dans un pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#recuperer-une-ressource-sous-forme-de-yaml" class="md-nav__link">
+    Récupérer une ressource sous forme de YAML
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#decrire-une-ressource" class="md-nav__link">
+    Décrire une ressource
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#creation-du-secret-pour-docker-registry" class="md-nav__link">
+    Création du Secret pour Docker registry
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#avoir-les-logs-dun-pod" class="md-nav__link">
+    Avoir les logs d'un pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#avoir-de-la-documentation-sur-une-resource" class="md-nav__link">
+    Avoir de la documentation sur une resource
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#mise-en-place-de-lautocompletion" class="md-nav__link">
+    Mise en place de l'autocompletion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#creation-dune-ressource-a-partir-dun-fichier-yaml" class="md-nav__link">
+    Création d'une ressource à partir d'un fichier YAML
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#suppression-dune-ressource" class="md-nav__link">
+    Suppression d'une ressource
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#rentrer-dans-un-pod" class="md-nav__link">
+    Rentrer dans un pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#recuperer-une-ressource-sous-forme-de-yaml" class="md-nav__link">
+    Récupérer une ressource sous forme de YAML
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#decrire-une-ressource" class="md-nav__link">
+    Décrire une ressource
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#creation-du-secret-pour-docker-registry" class="md-nav__link">
+    Création du Secret pour Docker registry
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#avoir-les-logs-dun-pod" class="md-nav__link">
+    Avoir les logs d'un pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#avoir-de-la-documentation-sur-une-resource" class="md-nav__link">
+    Avoir de la documentation sur une resource
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="cheatsheet">Cheatsheet</h1>
+<h2 id="mise-en-place-de-lautocompletion">Mise en place de l'autocompletion</h2>
+<p>Nous recommandons vivement de mettre en place l'autocompletion qui simplifiera beaucoup l'usage de du CLI kubectl :
+<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion" target="_blank">lien pour la mise en place ici</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Choisissez le bon onglet en fonction du shell que vous utilisez</p>
+</div>
+<h2 id="creation-dune-ressource-a-partir-dun-fichier-yaml">Création d'une ressource à partir d'un fichier YAML</h2>
+<div class="highlight"><pre id="__code_1"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_1 &gt; code"></button><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-0-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>FICHIER.yaml
+</code></pre></div>
+<h2 id="suppression-dune-ressource">Suppression d'une ressource</h2>
+<div class="highlight"><pre id="__code_2"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_2 &gt; code"></button><code tabindex="0"><a id="__codelineno-1-1" name="__codelineno-1-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-1-1"></a><span class="c1"># RESSOURCE est le type de ressource Kubernetes, valeurs possibles : pod, service, deploy, ingress, secret, namespace, etc</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-1-2"></a><span class="c1"># NOM_DE_LA_RESSOURCE est la nom de votre ressource dans votre namespace</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-1-3"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>RESSOURCE<span class="w"> </span>NOM_DE_LA_RESSOURCE
+</code></pre></div>
+<h2 id="rentrer-dans-un-pod">Rentrer dans un pod</h2>
+<div class="highlight"><pre id="__code_3"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_3 &gt; code"></button><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-2-1"></a><span class="c1"># Ici on rentre en mode interactif avec la commande /bin/sh dans NOM_DU_POD</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-2-2"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>NOM_DU_POD<span class="w"> </span>--<span class="w"> </span>/bin/sh
+</code></pre></div>
+<h2 id="recuperer-une-ressource-sous-forme-de-yaml">Récupérer une ressource sous forme de YAML</h2>
+<div class="highlight"><pre id="__code_4"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_4 &gt; code"></button><code tabindex="0"><a id="__codelineno-3-1" name="__codelineno-3-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-3-1"></a><span class="c1"># RESSOURCE est le type de ressource Kubernetes, valeurs possibles : pod, service, deploy, ingress, secret, namespace, etc</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-3-2"></a><span class="c1"># NOM_DE_LA_RESSOURCE est la nom de votre ressource dans votre namespace</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-3-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>RESSOURCE<span class="w"> </span>NOM_DE_LA_RESSOURCE<span class="w"> </span>-o<span class="o">=</span>yaml
+</code></pre></div>
+<h2 id="decrire-une-ressource">Décrire une ressource</h2>
+<p>Utile pour débugger car permet de voir les différents évènements après le déploiement
+</p><div class="highlight"><pre id="__code_5"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_5 &gt; code"></button><code tabindex="0"><a id="__codelineno-4-1" name="__codelineno-4-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-4-1"></a><span class="c1"># RESSOURCE est le type de ressource Kubernetes, valeurs possibles : pod, service, deploy, ingress, secret, namespace, etc</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-4-2"></a><span class="c1"># NOM_DE_LA_RESSOURCE est la nom de votre ressource dans votre namespace</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-4-3"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>RESSOURCE<span class="w"> </span>NOM_DE_LA_RESSOURCE
+</code></pre></div><p></p>
+<h2 id="creation-du-secret-pour-docker-registry">Création du Secret pour Docker registry</h2>
+<div class="highlight"><pre id="__code_6"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_6 &gt; code"></button><code tabindex="0"><a id="__codelineno-5-1" name="__codelineno-5-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-5-1"></a><span class="c1"># PASSWORD a été envoyé le premier jour par email.</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-5-2"></a><span class="c1"># USERNAME est la votre première lettre de votre prénom suivi de votre nom.</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-5-4"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>docker-registry<span class="w"> </span>takima-school-registry<span class="w"> </span>--docker-server<span class="o">=</span>registry.gitlab.com<span class="w"> </span>--docker-username<span class="o">=</span>USERNAME<span class="w"> </span>--docker-password<span class="o">=</span>PASSWORD
+</code></pre></div>
+<h2 id="avoir-les-logs-dun-pod">Avoir les logs d'un pod</h2>
+<div class="highlight"><pre id="__code_7"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_7 &gt; code"></button><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-6-1"></a><span class="c1"># -f pour follow</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-6-2"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>NOM_DU_POD<span class="w"> </span>-f
+</code></pre></div>
+<h2 id="avoir-de-la-documentation-sur-une-resource">Avoir de la documentation sur une resource</h2>
+<p>La documentation en ligne de kubernetes est bien fournie, mais il est également possible depuis un terminal d'obtenir
+rapidement des détails sur une resource en particulier ou ces champs. Par exemple sur la strategy d'un deployment. </p>
+<div class="highlight"><pre id="__code_8"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_8 &gt; code"></button><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/#__codelineno-7-1"></a>kubectl<span class="w"> </span>explain<span class="w"> </span>deployment.spec.strategy
+</code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Day 4 - Monitoring" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Day 4 - Monitoring
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-footer__link md-footer__link--next" aria-label="Next: About" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              About
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2023 - 2024 Takima
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.c7dec7e7.min.js"}</script>
+    
+    
+      <script src="./Cheatsheet - Kubernetes in action_files/bundle.da79ceb7.min.js"></script>
+      
+    
+  
+</body></html>

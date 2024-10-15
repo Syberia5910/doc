@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/ -->
+<html lang="en" class="js-focus-visible js" data-js-focus-visible=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style></style>
+    
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-8.1.1">
+    
+    
+      
+        <title>Day 2 - Deep Dive - Kubernetes in action</title>
+      
+    
+    
+      <link rel="stylesheet" href="./Day 2 - Deep Dive - Kubernetes in action_files/main.23b6d78a.min.css">
+      
+        
+        <link rel="stylesheet" href="./Day 2 - Deep Dive - Kubernetes in action_files/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#e92063">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="./Day 2 - Deep Dive - Kubernetes in action_files/css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="pink" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#tp-initiation-kubernetes-j2" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-header__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 2 - Deep Dive - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kubernetes in action
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Day 2 - Deep Dive
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">Type to start searching</div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-tabs__link">
+      Briefing
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-tabs__link md-tabs__link--active">
+        TP
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-tabs__link">
+      Cheatsheet
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-nav__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 2 - Deep Dive - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    Kubernetes in action
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-nav__link">
+        Briefing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked="">
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          TP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="TP" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          TP
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-nav__link">
+        Day 1 - Discovery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Day 2 - Deep Dive
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-nav__link md-nav__link--active">
+        Day 2 - Deep Dive
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#objectifs" class="md-nav__link">
+    Objectifs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#1ere-etape-deployer-lapi" class="md-nav__link">
+    1ère étape : déployer l’API
+  </a>
+  
+    <nav class="md-nav" aria-label="1ère étape : déployer l’API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#2e-etape-creer-la-base-de-donnees" class="md-nav__link">
+    2ᵉ étape : créer la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="2ᵉ étape : créer la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_1" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_1" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#consulter-la-base-de-donnees" class="md-nav__link">
+    Consulter la base de données
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#3e-etape-faire-pointer-lapi-sur-la-base-de-donnees" class="md-nav__link">
+    3ᵉ étape : Faire pointer l’API sur la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="3ᵉ étape : Faire pointer l’API sur la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_2" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_2" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#4e-etape-rendre-votre-deployment-parfait" class="md-nav__link">
+    4ᵉ étape : Rendre votre deployment parfait !
+  </a>
+  
+    <nav class="md-nav" aria-label="4ᵉ étape : Rendre votre deployment parfait !">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#les-requests-limits" class="md-nav__link">
+    Les requests / limits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#les-sondes-probes" class="md-nav__link">
+    Les Sondes (Probes)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#la-securite" class="md-nav__link">
+    La sécurité
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#5e-etape-cest-au-tour-du-front" class="md-nav__link">
+    5ᵉ étape : C'est au tour du Front.
+  </a>
+  
+    <nav class="md-nav" aria-label="5ᵉ étape : C&#39;est au tour du Front.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_3" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_3" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#6e-etape-la-persistance-dans-kubernetes" class="md-nav__link">
+    6ᵉ étape : La persistance dans Kubernetes
+  </a>
+  
+    <nav class="md-nav" aria-label="6ᵉ étape : La persistance dans Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_4" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-1-administration-de-la-base-de-donnees" class="md-nav__link">
+    Bonus 1 : Administration de la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 1 : Administration de la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#admin-de-la-db" class="md-nav__link">
+    Admin de la DB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-2-les-statefulsets" class="md-nav__link">
+    Bonus 2 : Les StatefulSets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-3-operator-postgres" class="md-nav__link">
+    Bonus 3 : Operator Postgres
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 3 : Operator Postgres">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#deployez-une-ressource-de-type-postgresql-cest-une-crd-ajoute-par-loperator" class="md-nav__link">
+    Déployez une ressource de type postgresql (c’est une CRD ajouté par l’operator)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#simulons-une-perte-du-master" class="md-nav__link">
+    Simulons une perte du master
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#pour-aller-plus-loin" class="md-nav__link">
+    Pour aller plus loin
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/" class="md-nav__link">
+        Day 3 - GitOps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-nav__link">
+        Day 4 - Monitoring
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-nav__link">
+        Cheatsheet
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#objectifs" class="md-nav__link">
+    Objectifs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#1ere-etape-deployer-lapi" class="md-nav__link">
+    1ère étape : déployer l’API
+  </a>
+  
+    <nav class="md-nav" aria-label="1ère étape : déployer l’API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#2e-etape-creer-la-base-de-donnees" class="md-nav__link">
+    2ᵉ étape : créer la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="2ᵉ étape : créer la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_1" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_1" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus" class="md-nav__link">
+    Bonus
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#consulter-la-base-de-donnees" class="md-nav__link">
+    Consulter la base de données
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#3e-etape-faire-pointer-lapi-sur-la-base-de-donnees" class="md-nav__link">
+    3ᵉ étape : Faire pointer l’API sur la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="3ᵉ étape : Faire pointer l’API sur la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_2" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_2" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#4e-etape-rendre-votre-deployment-parfait" class="md-nav__link">
+    4ᵉ étape : Rendre votre deployment parfait !
+  </a>
+  
+    <nav class="md-nav" aria-label="4ᵉ étape : Rendre votre deployment parfait !">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#les-requests-limits" class="md-nav__link">
+    Les requests / limits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#les-sondes-probes" class="md-nav__link">
+    Les Sondes (Probes)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#la-securite" class="md-nav__link">
+    La sécurité
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#5e-etape-cest-au-tour-du-front" class="md-nav__link">
+    5ᵉ étape : C'est au tour du Front.
+  </a>
+  
+    <nav class="md-nav" aria-label="5ᵉ étape : C&#39;est au tour du Front.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#ressources-necessaires_3" class="md-nav__link">
+    Ressources nécessaires
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_3" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#6e-etape-la-persistance-dans-kubernetes" class="md-nav__link">
+    6ᵉ étape : La persistance dans Kubernetes
+  </a>
+  
+    <nav class="md-nav" aria-label="6ᵉ étape : La persistance dans Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#a-vous-de-jouer_4" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-1-administration-de-la-base-de-donnees" class="md-nav__link">
+    Bonus 1 : Administration de la base de données
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 1 : Administration de la base de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#admin-de-la-db" class="md-nav__link">
+    Admin de la DB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-2-les-statefulsets" class="md-nav__link">
+    Bonus 2 : Les StatefulSets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#bonus-3-operator-postgres" class="md-nav__link">
+    Bonus 3 : Operator Postgres
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 3 : Operator Postgres">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#deployez-une-ressource-de-type-postgresql-cest-une-crd-ajoute-par-loperator" class="md-nav__link">
+    Déployez une ressource de type postgresql (c’est une CRD ajouté par l’operator)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#simulons-une-perte-du-master" class="md-nav__link">
+    Simulons une perte du master
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#pour-aller-plus-loin" class="md-nav__link">
+    Pour aller plus loin
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="tp-initiation-kubernetes-j2">TP initiation Kubernetes (J2)</h1>
+<h2 id="objectifs">Objectifs</h2>
+<p>Vous savez dorénavant déployer et administrer un applicatif simple sur Kubernetes. Mais les applicatifs ne se limitent souvent pas qu'à un simple Front. Sur les projets, vous aurez par exemple besoin de créer des APIs, des bases de données, que vos données soient persistantes, de gérer des brokers, etc.</p>
+<p>L'architecture la plus simple que l'on retrouve dans la majorité des projets est l'architecture 3 tiers. Elle contient les éléments suivants :</p>
+<ul>
+<li>Un front</li>
+<li>Une API</li>
+<li>Une base de données</li>
+</ul>
+<p>Aujourd'hui, l'objectif est de mettre en application ce qui a été appris pour déployer un applicatif 3 tiers dans Kubernetes. Rien que ça !</p>
+<p>Étant donné que chaque ressource Kubernetes correspond à un fichier yaml, vous allez utiliser une arborescence de dossiers précise et créer les dossiers suivants pour bien organiser vos fichiers :</p>
+<div class="highlight"><pre id="__code_1"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_1 &gt; code"></button><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-0-1"></a>.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-0-2"></a>└──<span class="w"> </span>TP-kube-02
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-0-3"></a><span class="w">    </span>├──<span class="w"> </span>api
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-0-4"></a><span class="w">    </span>├──<span class="w"> </span>database
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-0-5"></a><span class="w">    </span>└──<span class="w"> </span>front
+</code></pre></div>
+<p>Pour la suite du TP, un minimum de ressources concernant chaque service sera fourni et çe sera à vous de créer les ressources Kubernetes nécessaires !</p>
+<p>Amusez-vous bien !</p>
+<h2 id="1ere-etape-deployer-lapi">1ère étape : déployer l’API</h2>
+<h3 id="ressources-necessaires">Ressources nécessaires</h3>
+<p>L’image API à utiliser est la suivante :</p>
+<p><code>registry.gitlab.com/takima-school/images/cdb/api:latest</code></p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Attention, cette image est sur un registry qui nécessite des credentials (le secret <code>takima-school-registry</code> placé dans votre namespace)</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>L'image contient une API Java Spring Boot et expose ses services sur le port <strong>8080</strong>.</p>
+</div>
+<p>Voici les variables d'environnements disponibles sur <strong>API</strong> :</p>
+<div class="highlight"><pre id="__code_2"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_2 &gt; code"></button><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-1-1"></a><span class="l l-Scalar l-Scalar-Plain">DB_ENDPOINT</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-1-2"></a><span class="l l-Scalar l-Scalar-Plain">POSTGRES_DB</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-1-3"></a><span class="l l-Scalar l-Scalar-Plain">POSTGRES_USER</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-1-4"></a><span class="l l-Scalar l-Scalar-Plain">POSTGRES_PASSWORD</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>La variable <code>DB_ENDPOINT</code> prend pour cette image la forme <code>host:port</code>! Pas besoin de définir un protocol.</p>
+<p>Vous utiliserez les valeurs précises lors de l'étape 3.</p>
+</div>
+<h3 id="a-vous-de-jouer">À vous de jouer</h3>
+<ol>
+<li>Créez le fichier <code>api-deployment.yaml</code> associé à cette image et déployez-le.</li>
+<li>Créez le fichier <code>api-service.yaml</code> associé au Deployment et déployez-le.</li>
+<li>Créez le fichier <code>api-ingress.yaml</code> pour accéder à ce service et déployez-le.</li>
+</ol>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que se passe-t-il au niveau des Pods de l’API ? Vous pouvez jeter un œil aux logs. (<code>kubectl logs -f nomdupod</code>)</p>
+</div>
+<p>L’API a donc besoin d’une base de données pour fonctionner.
+Vous vous doutez maintenant à quoi servent les <em>variables d'environnements utilisables</em>, nous les utiliserons plus tard.</p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir les fichiers suivants dans le dossier <code>api</code> :</p>
+</div>
+<div class="highlight"><pre id="__code_3"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_3 &gt; code"></button><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-2-1"></a><span class="w">    </span>.
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-2-2"></a><span class="w">    </span>├──<span class="w"> </span>api-deployment.yaml
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-2-3"></a><span class="w">    </span>├──<span class="w"> </span>api-ingress.yaml
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-2-4"></a><span class="w">    </span>└──<span class="w"> </span>api-service.yaml
+</code></pre></div>
+<h2 id="2e-etape-creer-la-base-de-donnees">2ᵉ étape : créer la base de données</h2>
+<p>Comme l'API a besoin d’une base de données, il faut lui en fournir une. L’API utilise un SGBDR (Système de Gestion de Base de Données Relationnelles) Postgres.</p>
+<h3 id="ressources-necessaires_1">Ressources nécessaires</h3>
+<p>Image de la base de données :</p>
+<p><code>registry.takima.io/school/proxy/postgres:latest</code></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Postgres est accessible depuis le port <strong>5432</strong>.</p>
+</div>
+<p>Variables d'environnement utilisables pour l'image postgres :</p>
+<div class="highlight"><pre id="__code_4"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_4 &gt; code"></button><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-3-1"></a>POSTGRES_PASSWORD
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-3-2"></a>POSTGRES_USER
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-3-3"></a>POSTGRES_DB
+</code></pre></div>
+<h3 id="a-vous-de-jouer_1">À vous de jouer</h3>
+<ol>
+<li>Créez la ressource de type Secret : <code>pg-credentials.yaml</code> nommé “pg-credentials” contenant le username et le password (choisissez celui que vous souhaitez utiliser, mais attention, n’oubliez pas d'encoder les valeurs en base64, comme lors de la fin du tp 1).</li>
+<li>Créez un Configmap : <code>pg-config.yaml</code> nommé “pg-config” contenant le nom de la base de données, nommer la base de données “cdb-db”.</li>
+<li>Créez le Deployment : <code>pg-deployment.yaml</code> associé à l'image de la base de données.</li>
+<li>Créez le Service associé au Deployment : pg-service.yaml (le container écoute sur le port 5432).</li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Pour le Deployment :</p>
+<ol>
+<li>Bien penser à mapper les variables d'environnement dans le Deployment avec le ConfigMap et le Secret.</li>
+<li>Penser aux credentials pour pouvoir pull sur le registry privé.</li>
+</ol>
+</div>
+<p>Pour vérifier que la base de données fonctionne, vous pouvez afficher les logs et constater qu’elle est bien démarrée.</p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir 4 fichiers dans le dossier <code>database</code> :  </p>
+</div>
+<div class="highlight"><pre id="__code_5"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_5 &gt; code"></button><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-4-1"></a>.
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-4-2"></a>├──<span class="w"> </span>pg-credentials.yaml<span class="w">  </span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-4-3"></a>├──<span class="w"> </span>pg-config.yaml<span class="w">  </span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-4-4"></a>├──<span class="w"> </span>pg-deployment.yaml<span class="w">  </span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-4-5"></a>└──<span class="w"> </span>pg-service.yaml<span class="w">  </span>
+</code></pre></div>
+<h3 id="bonus">Bonus</h3>
+<h4 id="consulter-la-base-de-donnees">Consulter la base de données</h4>
+<p>Pour ce faire, vous devez réaliser les étapes suivantes :</p>
+<ul>
+<li>Utiliser la commande <code>kubectl exec</code> pour se connecter à Postgres.</li>
+<li>Lancer la commande <code>psql</code> pour interagir avec la base. Elle devrait avoir la forme suivante :</li>
+</ul>
+<div class="highlight"><pre id="__code_6"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_6 &gt; code"></button><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-5-1"></a>psql<span class="w"> </span>-d<span class="w"> </span>database<span class="w"> </span>-U<span class="w"> </span>user
+</code></pre></div>
+<p>Vous pouvez ensuite effectuer les actions suivantes :</p>
+<ul>
+<li>Lister les bases avec <code>\d</code></li>
+<li>Changer la base de données actuelle vers cdb-db : <code>\c cdb-db</code></li>
+<li>Lister les tables de la bdd cdb-db avec <code>\l</code></li>
+</ul>
+<h2 id="3e-etape-faire-pointer-lapi-sur-la-base-de-donnees">3ᵉ étape : Faire pointer l’API sur la base de données</h2>
+<h3 id="ressources-necessaires_2">Ressources nécessaires</h3>
+<p>Vous disposez maintenant d'une base de données et d'une API, mais vous n’avez pas encore configuré le lien entre ces deux services : l’API doit se connecter à la base de données Postgres pour fonctionner. Les variables d’environnements reconnues par l’image de l’API seront utilisées :</p>
+<div class="highlight"><pre id="__code_7"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_7 &gt; code"></button><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-6-1"></a>DB_ENDPOINT
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-6-2"></a>POSTGRES_DB
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-6-3"></a>POSTGRES_USER
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-6-4"></a>POSTGRES_PASSWORD
+</code></pre></div>
+<p>L’API est une application qui tourne dans Kubernetes, il est donc possible pour elle d’attaquer la base de données sur son Service (en interne dans Kubernetes). Pour qu’un Pod puisse joindre un service du même Cluster Kubernetes, il doit simplement indiquer le nom du service ainsi que le namespace dans lequel est le service.</p>
+<p>La nomenclature est la suivante : <code>mon-service.mon-namespace</code></p>
+<div class="admonition exemple">
+<p class="admonition-title">Exemple</p>
+<p>Une API publiée derrière un service nommé <code>api</code> dans le namespace “test” peut être requêtée de cette manière :
+<a href="http://api.test/" target="_blank">http://api.test</a></p>
+</div>
+<p>Pour la base de données, le fonctionnement est identique (sans http bien sûr, car ce n’est pas un serveur Web !).</p>
+<p>D’ailleurs, quand l'application doit attaquer un service dans le même namespace, vous n'êtes même pas obligé d’indiquer le nom du namespace !</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Les services se voient attribuer un enregistrement de type <code>DNS A</code> et ont un nom qui a pour forme : <code>mon-service.mon-namespace.svc.cluster.local</code>. La résolution de ce nom donne l'adresse ClusterIP du service.</p>
+</div>
+<p><a href="https://kubernetes.io/fr/docs/concepts/services-networking/dns-pod-service/" target="_blank">Plus d'informations sur l'attribution de DNS pour les services.</a></p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Quel est le nom du service de la base de données ?</p>
+</div>
+<p>Avec ces indications, vous devriez être capable de créer un ConfigMap avec la variable <code>DB_ENDPOINT</code>.
+N'oubliez pas le port.</p>
+<p>Remarquez que les autres variables <code>POSTGRES_USER</code> et <code>POSTGRES_PASSWORD</code> sont déjà présentes dans le Secret <code>pg-credentials</code> créé dans la partie 2. Vous pourrez donc le réutiliser tel quel. De même pour <code>POSTGRES_DB</code></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Lorsque vous utilisez des variables d'environnement, il faut toujours se demander si elle n'existe pas déjà dans un configmap existant, pour ne pas avoir de redondance et donc 2 endroits à changer en cas de modification.
+Ici bien configurer et réutiliser les variables dans les configMap : api-config, pg-config et secret : pg-credentials</p>
+</div>
+<h3 id="a-vous-de-jouer_2">À vous de jouer</h3>
+<ol>
+<li>Créez le ConfigMap api-config.yaml avec les clefs DB_ENDPOINT et POSTGRES_DB et déployez-le.</li>
+<li>Éditez votre fichier Deployment de l’API <code>api-deployment.yaml</code> pour utiliser les 4 variables d’environnement (depuis le configMap api-config ET le Secret pg-credentials) et appliquez cette modification.</li>
+</ol>
+<p>Votre API est maintenant fonctionnelle avec une base de données !</p>
+<p>Requêtez votre API :</p>
+<p><a href="http://api.votre_nom.takima.school/computers" target="_blank">http://api.votre_nom.takima.school/computers</a></p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir 1 nouveau fichier dans le dossier <code>api</code> :
+<code>api-config.yaml</code><br>
+Vous devez avoir modifié un fichier existant :
+<code>api-deployment.yaml</code></p>
+</div>
+<h2 id="4e-etape-rendre-votre-deployment-parfait">4ᵉ étape : Rendre votre deployment parfait !</h2>
+<h3 id="les-requests-limits">Les requests / limits</h3>
+<p>Maintenant, vous pouvez remettre des requests / limits adaptées à l'application et à son profil.
+Pour les déterminer efficacement, il faudrait profiler l'application.</p>
+<p>Ici, on vous propose en request / limit :
+ * memory 192M / 256M
+ * cpu 100m / 1</p>
+<h3 id="les-sondes-probes">Les Sondes (Probes)</h3>
+<p>Afin d'améliorer la gestion du cycle de vie de l'application, nous devons définir les <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" target="_blank">probes</a>.
+Ça tombe bien, pour l'API, Spring Boot a déjà exposé des <a href="https://docs.spring.io/spring-boot/docs/3.2.2/reference/html/actuator.html#actuator.endpoints.kubernetes-probes" target="_blank">endpoints dédiés</a> :</p>
+<ul>
+<li><code>/actuator/health/liveness</code> pour la sonde de liveness</li>
+<li><code>/actuator/health/readiness</code> pour la sonde de readiness</li>
+</ul>
+<p>Configurez correctement la startup, liveness et readiness probes pour être au top !</p>
+<h3 id="la-securite">La sécurité</h3>
+<p>Jusqu'à maintenant, on ne se souciait pas de la sécurité dans nos containers.
+Par défaut, tous les containers sont lancés en root, ce qui n'est pas une bonne pratique de sécurité.
+Par chance, les images de votre application <strong>computer-database</strong> sont déjà prêtes à fonctionner avec un utilisateur.</p>
+<ul>
+<li>l'api peut fonctionner avec le UID 1001 et le GID 1001</li>
+<li>le front peut fonctionner avec le UID 101 et le GID 101</li>
+</ul>
+<p>Mettez en œuvre le maximum de critères de sécurité pour votre application sur vos deployments. Appuyez-vous de la documentation officielle de Kubernetes.</p>
+<h2 id="5e-etape-cest-au-tour-du-front">5ᵉ étape : C'est au tour du Front.</h2>
+<p>C’est finalement le plus simple, car le Front n’a pas besoin d’attaquer de service interne.</p>
+<h3 id="ressources-necessaires_3">Ressources nécessaires</h3>
+<p>L’image Front à utiliser est la suivante : <code>registry.gitlab.com/takima-school/images/cdb/www:latest</code></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>L'image contient un Nginx qui expose un index.html sur le port <strong>8080</strong>.</p>
+</div>
+<p>Variables d'environnements utilisables :</p>
+<div class="highlight"><pre id="__code_8"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_8 &gt; code"></button><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-7-1"></a>API_URL
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Attention ! Ici, c'est l’URL qui sera utilisée côté navigateur client pour récupérer les informations de l’<strong>API</strong>.
+Il faudra donc indiquer l’URL (host) de l’ingress et non pas le nom du service interne Kubernetes de l’<strong>API</strong>.</p>
+<p>Il existe un <code>/health</code> pour la readiness probe.</p>
+</div>
+<h3 id="a-vous-de-jouer_3">À vous de jouer</h3>
+<ol>
+<li>Créez le ConfigMap : front-config.yaml associé à la documentation (avec la valeur de l’API URL que vous avez indiqué dans l’Ingress de l’API).</li>
+<li>Créez le Deployment : front-deployment.yaml associé à cette image.</li>
+<li>Créez le Service : front-service.yaml associé à ce Deployment.</li>
+<li>Créez l’Ingress : front-ingress.yaml pour accéder à ce service (vous pouvez utiliser <code>front.votre_nom.takima.school</code> par exemple)</li>
+</ol>
+<p>Vous devriez pouvoir accéder à votre Front : <a href="http://front.votre_nom.takima.school/" target="_blank">http://front.votre_nom.takima.school/</a></p>
+<p>Parfait, vous avez maintenant un applicatif complet prêt à être utilisé. Enfin prêt… Pas tout à fait !</p>
+<p>Il manque quelque chose d’important. Pour le constater :</p>
+<ol>
+<li>Sur votre navigateur internet, ajoutez un nouveau computer avec le bouton <strong>Add</strong>.</li>
+<li>Puis recherchez ce nouveau computer.</li>
+</ol>
+<p><img alt="" src="./Day 2 - Deep Dive - Kubernetes in action_files/H-OjZmAQLl6cVOx64QelrlOqBGoT6tLs0U6LlPFJztdUMHy19b9w_K-vv7CibrGSLQLZwPPfoSLlxohzvG19NOf6eCW7Enm2kEbAr563ZtG8zGOdxehHM0VhqRXj0yZTCIYDHkzz"></p>
+<p><em>C’est parfait, rien d’anormal, il est bien là.</em></p>
+<p>Maintenant, détruisez le Pod de la base de données Postgres (en utilisant Lens ou un kubectl delete pods…). Chouette, le Pod se reconstruit tout seul ! C’est génial, non ?</p>
+<p>Une fois le Pod Postgres démarré, retournez sur votre navigateur internet et recherchez à nouveau le computer que vous venez de créer... Il a disparu !</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Pourquoi le <em>computer</em> a disparu ?</p>
+</div>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir 4 nouveaux fichiers dans le dossier <code>front</code> :  </p>
+</div>
+<div class="highlight"><pre id="__code_9"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_9 &gt; code"></button><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-8-1"></a>.
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-8-2"></a>├──<span class="w"> </span>front-config.yaml<span class="w">  </span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-8-3"></a>├──<span class="w"> </span>front-deployment.yaml<span class="w">  </span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-8-4"></a>├──<span class="w"> </span>front-service.yaml<span class="w">  </span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-8-5"></a>└──<span class="w"> </span>front-ingress.yaml<span class="w">  </span>
+</code></pre></div>
+<h2 id="6e-etape-la-persistance-dans-kubernetes">6ᵉ étape : La persistance dans Kubernetes</h2>
+<p>Les containers qui tournent par défaut sont donc Stateless. D'ailleurs, la configuration des Pods est immuable : on ne redémarre pas un Pod, on le détruit pour qu’un nouveau Pod réapparaisse. Ce qui a pour conséquence que quand on détruit un Pod, toutes ses données disparaissent avec lui...</p>
+<p>Ce qu’on appelle la persistance des données est donc nécessaire pour éviter de perdre les nouveaux <em>computers</em> ajoutés.</p>
+<p>Kubernetes apporte ce fonctionnement avec les ressources appelées <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/" target="_blank">Persistent Volume</a> / <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims" target="_blank">Persistent Volume Claims</a>.</p>
+<p>Le <strong>Persistent Volume (PV)</strong> correspond à l’abstraction Kubernetes du volume physique mappé sur les serveurs, tandis que le <strong>Persistent Volume Claims</strong> (PVC) est une demande de stockage par un utilisateur. Il est similaire à un Pod. Les pods consomment des ressources de nœud et les PVC consomment des ressources PV. Les PVC peuvent demander une taille et des modes d'accès spécifiques (par exemple, ils peuvent être montés une fois en lecture/écriture ou plusieurs fois en lecture seule).</p>
+<p>Pour définir les différentes propriétés et performance d'une <strong>PersistantVolume</strong> les administrateurs ou provider de Cloud mettent à disposition différents types de stockage. Pour définir ces types de stockage, il existe la ressource <strong>StorageClass</strong> de Kubernetes.
+Dans le cas du TP, le StorageClass est déjà implémenté : il s’agit de l’ElasticBlockStore (<strong>EBS</strong>) de type “<strong>gp2</strong>” (pour General Purpose) fourni par Amazon Web Service.</p>
+<p>Il existe une multitude de Providers avec 3 types d’accès différents dont les noms parlent d’eux-mêmes :</p>
+<ul>
+<li>ReadWriteOnce</li>
+<li>ReadWriteMany</li>
+<li>ReadOnlyMany</li>
+</ul>
+<p><a href="https://kubernetes.io/fr/docs/concepts/storage/persistent-volumes/#modes-d-acc%C3%A8s" target="_blank">Tableau très utile</a> pour savoir les types d’accès permis par les Storage Providers.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>D’après le tableau, quel est le type d’accès implémenté par notre Storage Class EBS ? Pourquoi cela convient parfaitement pour la persistance de la base de données Postgres ?</p>
+</div>
+<p>Pour ajouter de la persistance dans un déploiement, il faut :</p>
+<ol>
+<li>Créer la ressource de Type PV / PVC.</li>
+<li>Utiliser la ressource PVC dans notre Deployment.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La relation PV - PVC est une relation 1 - 1 et la création d’un PVC utilisant un Storage Class créera automatiquement le PV associé.</p>
+</div>
+<h3 id="a-vous-de-jouer_4">À vous de jouer</h3>
+<ol>
+<li>
+<p>Créez la ressource PVC <code>pg-pvc.yaml</code> et déployez-la :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-9-12">12</a></span></pre></div></td><td class="code"><div><pre id="__code_10"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_10 &gt; code"></button><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PersistentVolumeClaim</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-db</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gp2</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">  </span><span class="nt">accessModes</span><span class="p">:</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">  </span><span class="nt">volumeMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Filesystem</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">    </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">      </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3Gi</span>
+</code></pre></div></td></tr></tbody></table></div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Vérifiez que le PVC est créé avec le PV. Quel est le nom du PV ?</p>
+</div>
+<p>Le volume est bien instancié, mais il n’est pas utilisé par un Pod pour le moment.</p>
+</li>
+<li>
+<p>Montez le nouveau PVC dans le Pod Postgres :</p>
+<p>Pour consommer un PVC dans un Pod, il faut le décrire dans la ressource Deployment. Il y a deux ajouts à effectuer :</p>
+</li>
+<li>
+<p>La déclaration du Persistant Volume en tant que volume (définition de son nom).</p>
+</li>
+<li>
+<p>Le montage de ce volume déclaré dans le Pod (sur un chemin (path) particulier du Container).</p>
+<p>Voici le block de déclaration du volume sur le déploiement, à placer au niveau <code>spec.template.spec</code> du déploiement :</p>
+<p></p><div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-10-4">4</a></span></pre></div></td><td class="code"><div><pre id="__code_11"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_11 &gt; code"></button><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-data</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">  </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-db</span>
+</code></pre></div></td></tr></tbody></table></div>
+Voici le block de point de montage du volume sur le Pod, à placer au niveau <code>spec.template.spec.containers</code> du déploiement :<p></p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-11-3">3</a></span></pre></div></td><td class="code"><div><pre id="__code_12"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_12 &gt; code"></button><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nt">volumeMounts</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/lib/postgresql/data</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-data</span>
+</code></pre></div></td></tr></tbody></table></div>
+</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Dans le cas précis d'une base de données Postgres, une action de plus est nécessaire, car Postgres n'accepte pas d'avoir un dossier non vide pour s'initialiser, or le storage AWS est livré avec un dossier "lost/found". Vous pouvez le constater si vous lancez votre déploiement sans configurer ce qui va suivre : votre base de données va retourner une erreur. Pour éviter cela, nous allons installer Postgres dans un sous-chemin de notre point de montage. Notre image Postgres dispose d'une variable d'environnement <code>PGDATA</code> qui permet de configurer ce comportement.</p>
+</div>
+<ol>
+<li>
+<p>Modifiez le ConfigMap pg-config.yaml et ajoutez la key:value suivante :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre id="__code_13"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_13 &gt; code"></button><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nt">db_path</span><span class="p">:</span><span class="w"> </span><span class="s">"/var/lib/postgresql/data/pgdata"</span>
+</code></pre></div></td></tr></tbody></table></div>
+</li>
+<li>
+<p>Utilisez ce nouveau paramètre dans le Deployment de votre base de données :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-13-4">4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-13-5">5</a></span></pre></div></td><td class="code"><div><pre id="__code_14"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_14 &gt; code"></button><code tabindex="0"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGDATA</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nt">configMapKeyRef</span><span class="p">:</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-config</span><span class="w">  </span><span class="c1"># Nom du configmap</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_path</span><span class="w">     </span><span class="c1"># nom de la clef dans le configMap contenant path ou installer la db dans le volume persistant</span>
+</code></pre></div></td></tr></tbody></table></div>
+</li>
+</ol>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Vous devez avoir 1 nouveau fichier dans le dossier <code>database</code> :
+<code>pg-pvc.yaml</code><br>
+Vous devez avoir modifié deux fichiers existants dans le dossier <code>database</code> :
+<code>pg-deployment.yaml</code>
+<code>pg-config.yaml</code></p>
+</div>
+<p>Vous pouvez maintenant essayer de supprimer un ordinateur sur le Front, puis supprimer le pod de la base de données et constater la persistance des données.</p>
+<h3 id="bonus-1-administration-de-la-base-de-donnees">Bonus 1 : Administration de la base de données</h3>
+<h4 id="admin-de-la-db">Admin de la DB</h4>
+<p>Vous allez maintenant déployer un service permettant d’administrer la base de données. Il est possible de définir plusieurs ressources Kubernetes dans un unique fichier YAML.</p>
+<p>Insérez ces ressources dans le fichier <code>database/pgadmin.yaml</code> et appliquez-le.</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-13">13</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-14">14</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-15">15</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-16">16</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-17">17</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-18">18</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-19">19</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-20">20</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-21">21</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-22">22</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-23">23</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-24">24</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-25">25</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-26">26</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-27">27</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-28">28</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-29">29</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-30">30</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-31">31</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-32">32</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-33">33</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-34">34</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-35">35</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-36">36</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-37">37</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-38">38</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-39">39</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-40">40</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-41">41</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-42">42</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-43">43</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-44">44</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-45">45</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-46">46</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-47">47</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-48">48</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-49">49</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-50">50</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-51">51</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-52">52</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-53">53</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-54">54</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-55">55</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-56">56</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-57">57</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-58">58</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-59">59</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-60">60</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-61">61</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-62">62</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-63">63</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-64">64</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-65">65</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-14-66">66</a></span></pre></div></td><td class="code"><div><pre id="__code_15"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_15 &gt; code"></button><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11"></a><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12"></a><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13"></a><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14"></a><span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15"></a><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16"></a><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17"></a><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19"></a><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">"dpage/pgadmin4"</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20"></a><span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21"></a><span class="w">          </span><span class="nt">envFrom</span><span class="p">:</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">configMapRef</span><span class="p">:</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23"></a><span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24"></a><span class="w">          </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGADMIN_DEFAULT_PASSWORD</span>
+<a id="__codelineno-14-26" name="__codelineno-14-26"></a><span class="w">              </span><span class="nt">valueFrom</span><span class="p">:</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27"></a><span class="w">                </span><span class="nt">secretKeyRef</span><span class="p">:</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28"></a><span class="w">                  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-29" name="__codelineno-14-29"></a><span class="w">                  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin-password</span>
+<a id="__codelineno-14-30" name="__codelineno-14-30"></a><span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-14-31" name="__codelineno-14-31"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<a id="__codelineno-14-32" name="__codelineno-14-32"></a><span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-14-33" name="__codelineno-14-33"></a><span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<a id="__codelineno-14-34" name="__codelineno-14-34"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https</span>
+<a id="__codelineno-14-35" name="__codelineno-14-35"></a><span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">443</span>
+<a id="__codelineno-14-36" name="__codelineno-14-36"></a><span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<a id="__codelineno-14-37" name="__codelineno-14-37"></a><span class="nn">---</span>
+<a id="__codelineno-14-38" name="__codelineno-14-38"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-14-39" name="__codelineno-14-39"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<a id="__codelineno-14-40" name="__codelineno-14-40"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-41" name="__codelineno-14-41"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-42" name="__codelineno-14-42"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-14-43" name="__codelineno-14-43"></a><span class="w">  </span><span class="nt">PGADMIN_DEFAULT_EMAIL</span><span class="p">:</span><span class="w"> </span><span class="s">"admin@takima.io"</span>
+<a id="__codelineno-14-44" name="__codelineno-14-44"></a><span class="nn">---</span>
+<a id="__codelineno-14-45" name="__codelineno-14-45"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-14-46" name="__codelineno-14-46"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<a id="__codelineno-14-47" name="__codelineno-14-47"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-48" name="__codelineno-14-48"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-49" name="__codelineno-14-49"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-14-50" name="__codelineno-14-50"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-51" name="__codelineno-14-51"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<a id="__codelineno-14-52" name="__codelineno-14-52"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-14-53" name="__codelineno-14-53"></a><span class="w">  </span><span class="nt">pgadmin-password</span><span class="p">:</span><span class="w"> </span><span class="s">"YWRtaW4xMjMq"</span><span class="w"> </span><span class="c1">#base64 of admin123*</span>
+<a id="__codelineno-14-54" name="__codelineno-14-54"></a><span class="nn">---</span>
+<a id="__codelineno-14-55" name="__codelineno-14-55"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-14-56" name="__codelineno-14-56"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<a id="__codelineno-14-57" name="__codelineno-14-57"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-58" name="__codelineno-14-58"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-59" name="__codelineno-14-59"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<a id="__codelineno-14-60" name="__codelineno-14-60"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+<a id="__codelineno-14-61" name="__codelineno-14-61"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-14-62" name="__codelineno-14-62"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NodePort</span>
+<a id="__codelineno-14-63" name="__codelineno-14-63"></a><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-14-64" name="__codelineno-14-64"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-14-65" name="__codelineno-14-65"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-14-66" name="__codelineno-14-66"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgadmin</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>La publication du service n'est pas souhaitée, car l’administration d’une base de données est une action sensible et doit se faire de manière sécurisée. Une fonctionnalité de l’outil Lens permet de monter une connexion distante sur un port local de votre ordinateur.</p>
+<p><img alt="" src="./Day 2 - Deep Dive - Kubernetes in action_files/ARZczKHjjPraW80n1fPU2L0Z-m6aag5dCITEoUmMmslOGq5YJMP6K17O_4N0UXZZkoyhta82Cq4CMKrhlkS3J2bzVNRjbgxWpRxV1XFYQRkKBCcVJOVXSZsxP_2XlC1xYO7Vb1kE"></p>
+<p>Au niveau <code>Network → Service</code>, cliquez sur le service pgadmin.</p>
+<p>Vous pourrez alors lancer le Port Forwarding. Cliquez dessus puis indiquez dans la fenêtre qui s’ouvre un port (par exemple 8081 si ce port n'est pas déjà utilisé sur votre machine) et cochez "open in browser" (pas besoin d'utiliser https ici).</p>
+<p>Cette action devrait ouvrir votre navigateur par défaut et la page de pgAdmin.</p>
+<p>Indiquez les user/password (dans l'exemple du TP : admin@takima.io / admin123*)</p>
+<p>pgAdmin est une application qui tourne dans Kubernetes, il est donc possible pour elle d’attaquer la base de données via son Service. Rappel : pour qu’un Pod puisse joindre un service du même cluster Kubernetes, il doit simplement indiquer le nom du service ainsi que le Namespace dans lequel est le service.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Fonctionnement de Service attaché à un Pod vu à <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#3e-etape-faire-pointer-lapi-sur-la-base-de-donnees">l'étape 3</a></p>
+</div>
+<p>Toujours dans pgAdmin :</p>
+<ol>
+<li>Cliquez droit sur “servers” → “create” → “server”</li>
+<li>Renseignez le host avec “postres.votre_namespace”</li>
+<li>Indiquez les user/password</li>
+<li>Utilisez le bouton Save</li>
+</ol>
+<p><img alt="" src="./Day 2 - Deep Dive - Kubernetes in action_files/h_PHsGifLGJNEccTgSHhLj-znjGZYHz7cVPwLu_6htRwqGCMr_sBIEjj4HrgY_WIuBHGjNu0bF08NhwzPrVa5JzgHclzEZnGw6us-_RL95oiPFAvHtqE6gqbuGnLqdngyrj-2ivq"></p>
+<p>Vous aurez alors une connexion à votre base de données. Vous retrouverez votre base avec le nom indiqué dans votre ConfigMap. Un initDb est utilisé dans l'image et a dû créer 2 tables dans le schéma public :</p>
+<ul>
+<li>Computer</li>
+<li>Company</li>
+<li>Operation</li>
+<li>Users</li>
+</ul>
+<h3 id="bonus-2-les-statefulsets">Bonus 2 : Les StatefulSets</h3>
+<p>Nous avons créé une database avec un deployment associé à un persistant volume.
+Cela fonctionne, mais quand on essaie de scaler le déploiement, on se retrouve bloqué, car en mode ReadWriteOnce,
+le volume ne peut pas être monté sur plusieurs pods.</p>
+<p>Kubernetes a prévu une ressource spécialement pour ce genre de déploiement : les <code>StatefulSets</code></p>
+<p>Avec ces ressources, plus besoin de créer au préalable un PVC pour être consommé dans le POD. On déclare directement ce PVC dans la ressource <code>StatefulSets</code> , et c'est celle-ci qui va piloter la création des PVC/PV</p>
+<p>Mettons cela en pratique pour notre DB postgres.</p>
+<ol>
+<li>
+<p>Éditez une ressource StatefulSet</p>
+<p>Le statefulSet fonctionne comme le deployment mais permet d'ajouter un block de provisioning de PVC</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-5">5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-6">6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-7">7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-15-8">8</a></span></pre></div></td><td class="code"><div><pre id="__code_16"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_16 &gt; code"></button><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="w">  </span><span class="nt">volumeClaimTemplates</span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg-data</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="w">      </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">"ReadWriteOnce"</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="w">      </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="w">        </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="w">          </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>Ensuite le volume se consomme dans le container de la même manière (block <code>volumeMounts:</code>)</p>
+</li>
+<li>
+<p>Déployez cette ressource</p>
+</li>
+<li>vérifiez qu'un PVC est bien provisionné, et observé son nom ainsi que le nom du pod créé.</li>
+<li>Essayez de scaler le statefulSet</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Ici quand on scale, on a des postgres indépendant et pas un cluster Primary/Standby.
+Ils ne fonctionnent pas dans un même cluster postgres.</p>
+</div>
+<h3 id="bonus-3-operator-postgres">Bonus 3 : Operator Postgres</h3>
+<p>Comme vous avez pu le voir, nous pouvons désormais déployer une base de données Postgres et lui attacher un volume permettant la persistance de la donnée.
+Mais au-delà de vouloir sauvegarder la donnée, nous aimerions que la base soit accessible tout le temps, même si le pod venait à tomber.
+Heureusement pour nous, la communauté Kubernetes a travaillé dur pour fournir un Operator Postgres qui peut faire presque tout ce dont vous pouvez rêver (du moins, pour une base de données).
+Nous allons voir ça ensemble :</p>
+<h4 id="deployez-une-ressource-de-type-postgresql-cest-une-crd-ajoute-par-loperator">Déployez une ressource de type postgresql (c’est une CRD ajouté par l’operator)</h4>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-12">12</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-13">13</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-14">14</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-15">15</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-16">16</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-16-17">17</a></span></pre></div></td><td class="code"><div><pre id="__code_17"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_17 &gt; code"></button><code tabindex="0"><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">"acid.zalan.do/v1"</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">formation-cdb</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="w">  </span><span class="nt">teamId</span><span class="p">:</span><span class="w"> </span><span class="s">"formation"</span><span class="w">  </span><span class="c1"># le team id doit matcher le préfixe dans le metadata.name, ici formation</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">  </span><span class="nt">volume</span><span class="p">:</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="w">  </span><span class="nt">numberOfInstances</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">  </span><span class="nt">users</span><span class="p">:</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="w">    </span><span class="nt">cdb</span><span class="p">:</span><span class="w">  </span><span class="c1"># database owner</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">superuser</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">createdb</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14"></a><span class="w">  </span><span class="nt">databases</span><span class="p">:</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15"></a><span class="w">    </span><span class="nt">cdb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdb</span><span class="w">  </span><span class="c1"># dbname: owner</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16"></a><span class="w">  </span><span class="nt">postgresql</span><span class="p">:</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17"></a><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"14"</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>Observez-les pods se créer : on peut voir le premier pod s’initialiser.</p>
+<p>Observez les logs de ce premier pod, on doit retrouver à plusieurs reprise le message suivant :</p>
+<p></p><div class="highlight"><pre id="__code_18"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_18 &gt; code"></button><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-17-1"></a>INFO:<span class="w"> </span>no<span class="w"> </span>action.<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span><span class="o">(</span>formation-cdb-0<span class="o">)</span><span class="w"> </span>the<span class="w"> </span>leader<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>lock
+</code></pre></div>
+Le deuxième pod (en mode standby) va également se créer dans un second temps (les pods se lancent les uns après les autres. C’est une particularité des <code>StatefulSet</code>). Allez voir les logs du pod.   <p></p>
+<p>On doit retrouver son initialisation sur le master :</p>
+<div class="highlight"><pre id="__code_19"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_19 &gt; code"></button><code tabindex="0"><a id="__codelineno-18-1" name="__codelineno-18-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-1"></a><span class="m">2022</span>-02-02<span class="w"> </span><span class="m">18</span>:24:39,452<span class="w"> </span>INFO:<span class="w"> </span>trying<span class="w"> </span>to<span class="w"> </span>bootstrap<span class="w"> </span>from<span class="w"> </span>leader<span class="w"> </span><span class="s1">'formation-cdb-0'</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-2"></a><span class="m">1024</span>+0<span class="w"> </span>records<span class="w"> </span><span class="k">in</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-3"></a><span class="m">1024</span>+0<span class="w"> </span>records<span class="w"> </span>out
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-4"></a><span class="m">16777216</span><span class="w"> </span>bytes<span class="w"> </span><span class="o">(</span><span class="m">17</span><span class="w"> </span>MB,<span class="w"> </span><span class="m">16</span><span class="w"> </span>MiB<span class="o">)</span><span class="w"> </span>copied,<span class="w"> </span><span class="m">0</span>.0123499<span class="w"> </span>s,<span class="w"> </span><span class="m">1</span>.4<span class="w"> </span>GB/s
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-5"></a>NOTICE:<span class="w">  </span>all<span class="w"> </span>required<span class="w"> </span>WAL<span class="w"> </span>segments<span class="w"> </span>have<span class="w"> </span>been<span class="w"> </span>archived
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-6"></a><span class="m">2022</span>-02-02<span class="w"> </span><span class="m">18</span>:24:41,013<span class="w"> </span>INFO:<span class="w"> </span>replica<span class="w"> </span>has<span class="w"> </span>been<span class="w"> </span>created<span class="w"> </span>using<span class="w"> </span>basebackup_fast_xlog
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-18-7"></a><span class="m">2022</span>-02-02<span class="w"> </span><span class="m">18</span>:24:41,014<span class="w"> </span>INFO:<span class="w"> </span>bootstrapped<span class="w"> </span>from<span class="w"> </span>leader<span class="w"> </span><span class="s1">'formation-cdb-0'</span>
+</code></pre></div>
+<p>Puis des logs indiquant qu’il est un réplica et qu’il suit le leader :</p>
+<div class="highlight"><pre id="__code_20"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_20 &gt; code"></button><code tabindex="0"><a id="__codelineno-19-1" name="__codelineno-19-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-19-1"></a>INFO:<span class="w"> </span>no<span class="w"> </span>action.<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>a<span class="w"> </span>secondary<span class="w"> </span><span class="o">(</span>formation-cdb-1<span class="o">)</span><span class="w"> </span>and<span class="w"> </span>following<span class="w"> </span>a<span class="w"> </span>leader<span class="w"> </span><span class="o">(</span>formation-cdb-0<span class="o">)</span>
+</code></pre></div>
+<h4 id="simulons-une-perte-du-master">Simulons une perte du master</h4>
+<p>Détruisez le pod faisant tourner le postgres master et préparez-vous à observer les logs du pod replica.</p>
+<p>On doit constater qu’il détecte quasi instantanément la perte du nœud primaire et qu’il va faire ce qu’on appelle une promotion pour devenir le nouveau nœud primaire. 
+Après l’initialisation, on doit retrouver dans les logs :</p>
+<div class="highlight"><pre id="__code_21"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_21 &gt; code"></button><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-20-1"></a>INFO:<span class="w"> </span>no<span class="w"> </span>action.<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span><span class="o">(</span>formation-cdb-1<span class="o">)</span><span class="w"> </span>the<span class="w"> </span>leader<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>lock
+</code></pre></div>
+<p>On a donc bien un cluster avec de la haute disponibilité.</p>
+<h4 id="pour-aller-plus-loin">Pour aller plus loin</h4>
+<p>Supprimez votre ressource PostgresSQL (cela prend un peu de temps avec les <code>StatefulSet</code>. Attendez que les pods disparaissent).
+Éditez ensuite votre ressource yaml postgresql pour y ajouter la configuration suivante :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-21-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-21-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/#__codelineno-21-3">3</a></span></pre></div></td><td class="code"><div><pre id="__code_22"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_22 &gt; code"></button><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="w">  </span><span class="nt">enableLogicalBackup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="w">  </span><span class="nt">logicalBackupSchedule</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30 00 * * *</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>Puis redéployez cette ressource postgres.</p>
+<p>Vous devez constater qu’une nouvelle ressource kubernetes est présente : le <a href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/" target="_blank">Cronjob</a>.</p>
+<p>C’est lui qui déclenche les backups logiques : déclenchez maintenant le job manuellement. </p>
+<p>Un pod va être provisionné, faire un backup du postgres et envoyer tout cela dans un storage S3 (ce n’est pas magique tout a été configuré dans l’opérateur). </p>
+<p>Demandez à un intervenant de voir si le backup a bien été réceptionné dans S3.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Day 1 - Discovery" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Day 1 - Discovery
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/" class="md-footer__link md-footer__link--next" aria-label="Next: Day 3 - GitOps" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Day 3 - GitOps
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2023 - 2024 Takima
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.c7dec7e7.min.js"}</script>
+    
+    
+      <script src="./Day 2 - Deep Dive - Kubernetes in action_files/bundle.da79ceb7.min.js"></script>
+      
+    
+  
+</body></html>

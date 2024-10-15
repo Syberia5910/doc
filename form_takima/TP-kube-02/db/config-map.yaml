@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  cdb-db: mydb
+  cdb-user: myusr
+  db_path: "/var/lib/postgresql/data/pgdata"
+kind: ConfigMap
+metadata:
+  name: db-cm

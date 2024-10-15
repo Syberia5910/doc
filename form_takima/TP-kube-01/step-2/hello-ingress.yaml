@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-website-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: simple-website.nicolas-lecaille.takima.school
+      http:
+        paths:
+          - backend:
+              service:
+                name: simple-website-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

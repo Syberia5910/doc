@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/ -->
+<html lang="en" class="js-focus-visible js" data-js-focus-visible=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style></style>
+    
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-8.1.1">
+    
+    
+      
+        <title>Day 3 - GitOps - Kubernetes in action</title>
+      
+    
+    
+      <link rel="stylesheet" href="./Day 3 - GitOps - Kubernetes in action_files/main.23b6d78a.min.css">
+      
+        
+        <link rel="stylesheet" href="./Day 3 - GitOps - Kubernetes in action_files/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#e92063">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="./Day 3 - GitOps - Kubernetes in action_files/css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="pink" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#tp-initiation-kubernetes-j3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-header__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 3 - GitOps - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kubernetes in action
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Day 3 - GitOps
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">Type to start searching</div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-tabs__link">
+      Briefing
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-tabs__link md-tabs__link--active">
+        TP
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-tabs__link">
+      Cheatsheet
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" title="Kubernetes in action" class="md-nav__button md-logo" aria-label="Kubernetes in action" data-md-component="logo">
+      
+  <img src="./Day 3 - GitOps - Kubernetes in action_files/logo.png" alt="logo">
+
+    </a>
+    Kubernetes in action
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/" class="md-nav__link">
+        Briefing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked="">
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          TP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="TP" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          TP
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch1-discover-kubernetes/" class="md-nav__link">
+        Day 1 - Discovery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-nav__link">
+        Day 2 - Deep Dive
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Day 3 - GitOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/" class="md-nav__link md-nav__link--active">
+        Day 3 - GitOps
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#objectifs" class="md-nav__link">
+    Objectifs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#initiation-aux-operators-kubernetes" class="md-nav__link">
+    Initiation aux Operators Kubernetes
+  </a>
+  
+    <nav class="md-nav" aria-label="Initiation aux Operators Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#eck" class="md-nav__link">
+    ECK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#la-ressource-elasticsearch" class="md-nav__link">
+    La ressource Elasticsearch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#la-ressource-kibana" class="md-nav__link">
+    La ressource Kibana
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#aller-plus-loin-avec-elk" class="md-nav__link">
+    Aller plus loin avec ELK
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+    <nav class="md-nav" aria-label="Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#linux-package-manager-debianubuntu" class="md-nav__link">
+    Linux - Package manager - Debian/Ubuntu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#linux-script" class="md-nav__link">
+    Linux - Script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#macos" class="md-nav__link">
+    MacOS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#faire-des-templates-avec-helm" class="md-nav__link">
+    Faire des templates avec Helm
+  </a>
+  
+    <nav class="md-nav" aria-label="Faire des templates avec Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#preambule" class="md-nav__link">
+    Préambule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#a-vous-de-jouer" class="md-nav__link">
+    À vous de jouer !
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-1" class="md-nav__link">
+    Bonus 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-2" class="md-nav__link">
+    Bonus 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-3" class="md-nav__link">
+    Bonus 3
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#a-vous-de-jouer_1" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#gitops-avec-argocd" class="md-nav__link">
+    GitOps avec ArgoCD
+  </a>
+  
+    <nav class="md-nav" aria-label="GitOps avec ArgoCD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#accedez-au-portail-argocd" class="md-nav__link">
+    Accédez au portail ArgoCD.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#importez-votre-repository-gitlab" class="md-nav__link">
+    Importez votre Repository Gitlab.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#creez-une-application" class="md-nav__link">
+    Créez une application.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-un-nouvel-environnement" class="md-nav__link">
+    Bonus : un nouvel environnement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-nav__link">
+        Day 4 - Monitoring
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/cheatsheet/" class="md-nav__link">
+        Cheatsheet
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 472px;">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#objectifs" class="md-nav__link">
+    Objectifs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#initiation-aux-operators-kubernetes" class="md-nav__link">
+    Initiation aux Operators Kubernetes
+  </a>
+  
+    <nav class="md-nav" aria-label="Initiation aux Operators Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#eck" class="md-nav__link">
+    ECK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#la-ressource-elasticsearch" class="md-nav__link">
+    La ressource Elasticsearch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#la-ressource-kibana" class="md-nav__link">
+    La ressource Kibana
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#aller-plus-loin-avec-elk" class="md-nav__link">
+    Aller plus loin avec ELK
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+    <nav class="md-nav" aria-label="Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#linux-package-manager-debianubuntu" class="md-nav__link">
+    Linux - Package manager - Debian/Ubuntu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#linux-script" class="md-nav__link">
+    Linux - Script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#macos" class="md-nav__link">
+    MacOS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#faire-des-templates-avec-helm" class="md-nav__link">
+    Faire des templates avec Helm
+  </a>
+  
+    <nav class="md-nav" aria-label="Faire des templates avec Helm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#preambule" class="md-nav__link">
+    Préambule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#a-vous-de-jouer" class="md-nav__link">
+    À vous de jouer !
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-1" class="md-nav__link">
+    Bonus 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-2" class="md-nav__link">
+    Bonus 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-3" class="md-nav__link">
+    Bonus 3
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#a-vous-de-jouer_1" class="md-nav__link">
+    À vous de jouer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#gitops-avec-argocd" class="md-nav__link">
+    GitOps avec ArgoCD
+  </a>
+  
+    <nav class="md-nav" aria-label="GitOps avec ArgoCD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#accedez-au-portail-argocd" class="md-nav__link">
+    Accédez au portail ArgoCD.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#importez-votre-repository-gitlab" class="md-nav__link">
+    Importez votre Repository Gitlab.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#creez-une-application" class="md-nav__link">
+    Créez une application.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#bonus-un-nouvel-environnement" class="md-nav__link">
+    Bonus : un nouvel environnement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="tp-initiation-kubernetes-j3">TP initiation Kubernetes (J3)</h1>
+<h2 id="objectifs">Objectifs</h2>
+<p>Vous possédez maintenant toutes les ressources yaml qui décrivent votre applicatif et vous pouvez donc déployer rapidement toute votre stack dans Kubernetes. C’est un bon début !</p>
+<p>Grâce à cela, vous pouvez détruire et construire un environnement complet facilement. De plus, toutes les problématiques d'exploitation sont gérées par Kubernetes (High Availability, Scaling, Auto Healing, Loadbalancing, etc.).</p>
+<p>Avant d'aller un peu plus loin dans la partie déploiement, un petit tour parmi le monde merveilleux des Operators Kubernetes s'impose !</p>
+<h2 id="initiation-aux-operators-kubernetes">Initiation aux Operators Kubernetes</h2>
+<p>Les <strong>Operators</strong> Kubernetes permettent d'enrichir Kubernetes avec de nouvelles ressources personnalisées appelées <strong>CRD</strong> (Custom Ressource Definition). Il en existe pour une multitude de produits et vous pouvez même créer votre propre CRD si l'envie vous prend (si c'est utile bien sûr) !</p>
+<p>Le cas de l'Operator Elasticsearch, appelé <strong>ECK</strong> pour <code>Elastic Cloud on Kubernetes</code>, sera étudié pour cette mise en pratique.</p>
+<h3 id="eck">ECK</h3>
+<p>ECK est un Operator qui ajoute la possibilité de créer plusieurs CRDs, notamment :</p>
+<ul>
+<li>Elasticsearch</li>
+<li>Kibana</li>
+</ul>
+<p>Les noms sont assez explicites : <strong>Elasticsearch</strong> déploie un cluster Elasticsearch, et <strong>Kibana</strong> le dashboard de la stack ELK.</p>
+<p>Comme les Operators s'installent au niveau global du Cluster Kubernetes (un Operator ECK par Cluster), l'installation se fera en mode <strong>Démo</strong>.</p>
+<div class="admonition demo">
+<p class="admonition-title">Demo</p>
+</div>
+<p>Voilà l'Operator est installé, c'est maintenant à vous de déployer une Stack Elastic !</p>
+<h3 id="la-ressource-elasticsearch">La ressource Elasticsearch</h3>
+<p>Tout d'abord, créez un dossier <code>elk</code> dans lequel vous éditerez les ressources YAML.</p>
+<p>Vous allez ensuite commencer par le plus important : la ressource <strong>elasticsearch</strong>.</p>
+<ol>
+<li>
+<p>Éditez un yaml <code>elasticsearch.yaml</code>.</p>
+<p><em>Quelqu'un s'est amusé à effacer des valeurs dans le yaml !!</em>
+</p><div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre id="__code_1"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_1 &gt; code"></button><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch.k8s.elastic.co/v1</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.16.0</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span><span class="nt">nodeSets</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="nt">node.store.allow_mmap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div></td></tr></tbody></table></div>
+2.  Vérifiez le bon déploiement d'Elasticsearch.
+<div class="highlight"><pre id="__code_2"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_2 &gt; code"></button><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-1-1"></a><span class="c1">#commandes utiles:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-1-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>elasticsearch
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-1-3"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>elasticsearch<span class="w"> </span>name
+</code></pre></div>
+3.  Observez quelles <strong>ressources natives</strong> ce CRD a créé.<p></p>
+</li>
+</ol>
+<h3 id="la-ressource-kibana">La ressource Kibana</h3>
+<p>Que serait un cluster Elasticsearch sans son fidèle dashboard <strong>Kibana</strong> ?</p>
+<ol>
+<li>
+<p>Créez un fichier YAML <code>kibana.yaml</code> dans le dossier <code>elk</code></p>
+<p><em>Par contre, un petit bug est passé par là, plusieurs lignes ont disparu !! Vous devez corriger ce qu'il manque dans <code>elasticsearchRef</code></em>
+</p><div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-6">6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-7">7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-8">8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre id="__code_3"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_3 &gt; code"></button><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana.k8s.elastic.co/v1</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nt">kind</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">  </span><span class="nt">elasticsearchRef</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span>
+</code></pre></div></td></tr></tbody></table></div><p></p>
+</li>
+<li>
+<p>Créez un Ingress pour pouvoir accéder à Kibana depuis le navigateur internet <code>kibana-ingress.yaml</code>.</p>
+<p>Pour l'Ingress, vous devriez y arriver avec tout ce que vous avez déjà appris.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul>
+<li>Regardez les services qu'<em>ES</em> propose et les ports associés</li>
+<li>Attention le pod Kibana est en TLS, il faut donc rajouter ces annotations dans votre ingress:
+  <div class="highlight"><pre id="__code_4"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_4 &gt; code"></button><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-3-1"></a><span class="nt">nginx.ingress.kubernetes.io/backend-protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HTTPS</span>
+</code></pre></div></li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accédez au Kibana avec l'URL indiquée dans l'Ingress.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Pour l'authentification, observez le Secret <strong>-es-elastic-user</strong> qui contient le mot de passe et qui a été créé par le CRD Elasticsearch.
+L'utilisateur est <code>elastic</code>.</p>
+</div>
+<p><img alt="Login to kibana dashboard" src="./Day 3 - GitOps - Kubernetes in action_files/kibana-login.png"></p>
+<p>Une fois connecté, Kibana vous propose de découvrir le produit.
+   Pas de temps à perdre : cliquez directement sur <strong>Explore my own</strong> !</p>
+</li>
+<li>
+<p>Vérifiez que Kibana est bien lié au Cluster Elasticsearch.</p>
+</li>
+</ol>
+<p>Pour ce faire :</p>
+<ul>
+<li>Naviguez sur le menu en haut à gauche.</li>
+<li>Cliquez sur Dev tools.
+    <img alt="devtool kibana dashboard" src="./Day 3 - GitOps - Kubernetes in action_files/kibana-devtool.png"></li>
+<li>Il est maintenant possible de requêter le cluster :</li>
+</ul>
+<p>Pour voir son état de santé et les nodes du cluster :</p>
+<div class="highlight"><pre id="__code_5"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_5 &gt; code"></button><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-4-1"></a>GET _cat/health?v
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-4-2"></a>GET _cat/allocation?v
+</code></pre></div>
+<p><img alt="Kibana elasticsearch nodes allocation" src="./Day 3 - GitOps - Kubernetes in action_files/kibana-allocation.png"></p>
+<p>Vous pouvez retrouver la taille du volume provisionné.</p>
+<h3 id="aller-plus-loin-avec-elk">Aller plus loin avec ELK</h3>
+<ol>
+<li>
+<p>Scalez le Cluster ELK à 3 nœuds : éditez le CRD Elasticsearch et observez les nouveaux <strong>Pods elasticsearch</strong> se créer et s'initialiser un par un.</p>
+</li>
+<li>
+<p>Retournez dans Kibana et relancer :
+    </p><div class="highlight"><pre id="__code_6"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_6 &gt; code"></button><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-5-1"></a>GET _cat/health?v
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-5-2"></a>GET _cat/allocation?v
+</code></pre></div><p></p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Que constatez-vous ?</p>
+</div>
+</li>
+<li>
+<p>Vérifiez que le Cluster fonctionne correctement.</p>
+</li>
+</ol>
+<div class="highlight"><pre id="__code_7"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_7 &gt; code"></button><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-1"></a># Créér l'index tp et ajouter un doc
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-2"></a>PUT tp/_doc/1
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-3"></a>{
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-4"></a>  "body": "hello"
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-5"></a>}
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-7"></a># requêter le doc 
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-9"></a>GET tp/_doc/1
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-12"></a># Vérifier que l'index tp existe bien et qu'il contient un seul doc
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-6-14"></a>GET _cat/indices?v
+</code></pre></div>
+<p>Cet exemple assez simple permet de démontrer qu'il est facile de créer des stacks Elasticsearch rapidement et à la demande.</p>
+<p>Bien sûr, la configuration du CRD Elasticsearch ou Kibana peut aller bien plus loin (aussi loin que la config Elasticsearch classique le permet).</p>
+<div class="admonition check">
+<p class="admonition-title">Check</p>
+<p>Le dossier <code>elk</code> doit contenir les éléments suivants :</p>
+</div>
+<div class="highlight"><pre id="__code_8"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_8 &gt; code"></button><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-7-1"></a><span class="w">    </span>.
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-7-2"></a><span class="w">    </span>├──<span class="w"> </span>elasticsearch.yaml
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-7-3"></a><span class="w">    </span>├──<span class="w"> </span>kibana.yaml
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-7-4"></a><span class="w">    </span>└──<span class="w"> </span>kibana-ingress.yaml
+</code></pre></div>
+<h2 id="helm">Helm</h2>
+<p>Après avoir fait un tour sur les Operator, retour aux ressources précédentes : l'API, le Front et la base de données.</p>
+<p>Vous vous demandez peut-être comment gérer plusieurs environnements, des variables entre les ressources YAML, des conditions en fonction de l'environnement, etc.</p>
+<p>Aujourd'hui ce n'est pas possible, n'est-ce-pas ?</p>
+<p>Surtout que dans cette formation, vous utilisez un petit applicatif, mais imaginez que vous en ayez des centaines à gérer (avec les architectures microservices, ça peut arriver vite !) : cela deviendrait rapidement ingérable.</p>
+<p>Le constat est là : les ressources actuelles sont assez statiques en l’état.</p>
+<p>Il est possible d'industrialiser tout cela.</p>
+<h3 id="installation">Installation</h3>
+<p>Dans un premier temps, vous allez installer Helm et Git.</p>
+<h4 id="linux-package-manager-debianubuntu">Linux - Package manager - Debian/Ubuntu</h4>
+<div class="highlight"><pre id="__code_9"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_9 &gt; code"></button><code tabindex="0"><a id="__codelineno-8-1" name="__codelineno-8-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-1"></a>curl<span class="w"> </span>https://baltocdn.com/helm/signing.asc<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>apt-key<span class="w"> </span>add<span class="w"> </span>-
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>apt-transport-https<span class="w"> </span>--yes
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"deb https://baltocdn.com/helm/stable/debian/ all main"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/helm-stable-debian.list
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-4"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-5"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>helm
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-7"></a><span class="c1"># git</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-8"></a>add-apt-repository<span class="w"> </span>ppa:git-core/ppa
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-9"></a>apt<span class="w"> </span>update
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-8-10"></a>apt<span class="w"> </span>install<span class="w"> </span>git
+</code></pre></div>
+<h4 id="linux-script">Linux - Script</h4>
+<div class="highlight"><pre id="__code_10"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_10 &gt; code"></button><code tabindex="0"><a id="__codelineno-9-1" name="__codelineno-9-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>-o<span class="w"> </span>get_helm.sh<span class="w"> </span>https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-2"></a>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>get_helm.sh
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-3"></a>./get_helm.sh
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-5"></a><span class="c1"># must work fine</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-6"></a>helm<span class="w"> </span>version
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-8"></a><span class="c1"># git</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-9-9"></a><span class="c1"># utiliser un gestionnaire de packet ou un téléchargement direct : https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git</span>
+</code></pre></div>
+<h4 id="macos">MacOS</h4>
+<div class="highlight"><pre id="__code_11"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_11 &gt; code"></button><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-1"></a>brew<span class="w"> </span>install<span class="w"> </span>helm
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-3"></a><span class="c1"># must works fine</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-4"></a>helm<span class="w"> </span>version
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-6"></a><span class="c1"># Git</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-10-7"></a>https://git-scm.com/download/mac
+</code></pre></div>
+<h4 id="windows">Windows</h4>
+<div class="highlight"><pre id="__code_12"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_12 &gt; code"></button><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-11-1"></a># Helm
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-11-2"></a>https://helm.sh/docs/intro/install/
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-11-4"></a># Git
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-11-5"></a>https://git-scm.com/download/win
+</code></pre></div>
+<h2 id="faire-des-templates-avec-helm">Faire des templates avec Helm</h2>
+<h3 id="preambule">Préambule</h3>
+<p>Helm est un outil indispensable pour déployer des stacks applicatives complètes dans Kubernetes. Pratique, c’est un projet maintenu par la <a href="https://www.cncf.io/">CNCF</a>.</p>
+<p>L’idée est simple : permettre de faire des templates de toutes les ressources yaml d’une application donnée et les déployer sur Kubernetes !
+En définitive, cela pourrait s'apparenter à la possibilité de déployer des plateformes complètes, clef en main, un peu sur le modèle PaaS, Plateforme as a Service.</p>
+<p>Une stack applicative qui se déploie via Helm se nomme un <strong>Chart Helm</strong>.
+L’objectif ici est donc de créer un <strong>Chart Helm</strong> pour votre stack ComputerDatabase.</p>
+<h3 id="setup">Setup</h3>
+<p>Avant d'utiliser Helm, vous allez mettre en place un dépôt Git avec les ressources Kubernetes fournies pour ce TP.
+Cela permettra plus tard d'y connecter ArgoCD.</p>
+<p><em>Vous pouvez passer directement à l'étape </em><em>3</em><em> si vous avez déjà un compte Git configuré sur Gitlab.com.</em></p>
+<ol>
+<li>Créer un compte sur <a href="https://gitlab.com/" target="_blank">https://gitlab.com/</a>.</li>
+<li>Configurez un mot de passe à votre compte si vous vous êtes connecté sans éditer de mot de passe <a href="https://gitlab.com/-/profile/password/edit" target="_blank">page suivante</a>.</li>
+<li>Créez un repository sur Gitlab <a href="https://gitlab.com/projects/new#blank_project" target="_blank">https://gitlab.com/projects/new#blank_project</a>.</li>
+</ol>
+<p><img alt="Git create project" src="./Day 3 - GitOps - Kubernetes in action_files/git-create-project.jpg"></p>
+<p>Commandes à lancer une fois votre repository créé :
+</p><div class="highlight"><pre id="__code_13"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_13 &gt; code"></button><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-12-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/votreUser/ch3_gitops.git
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-12-2"></a><span class="c1"># votre username &amp; password de gitlab seront demandés.</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-12-4"></a><span class="nb">cd</span><span class="w"> </span>ch3_gitops
+</code></pre></div><p></p>
+<ol>
+<li>
+<p>Téléchargez <a href="https://gitlab.takima.io/school/kubernetes-01/k8s-trainees/-/archive/main/k8s-trainees-main.tar.gz?path=boilerplate/day-3/step-1" target="_blank">les premières ressources</a> pour Helm. (Il se peut que ce boilerplate soit vide pour plus de fun)</p>
+</li>
+<li>
+<p>Décompressez le contenu de l'archive et déplacez le <strong>contenu</strong> du dossier <code>k8s-trainees-main/boilerplate/day-3/step-1</code> dans votre repository Git <code>ch3_gitops</code>.</p>
+</li>
+<li>
+<p>Une fois les ressources téléchargées, faites un premier commit et push !
+</p><div class="highlight"><pre id="__code_14"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_14 &gt; code"></button><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-13-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">"Init Helm resources"</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-13-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div><p></p>
+</li>
+</ol>
+<p>Une fois l'étape de commit réalisée, vous pouvez jeter un coup d'œil aux différents éléments fournis :</p>
+<ol>
+<li><code>templates/</code> : contient une version template de toutes les ressources Kubernetes que vous devez déployer.</li>
+<li><code>Chart.yaml</code> : décrit votre chart (la version, le nom, les maintainers).</li>
+<li><code>values.yaml</code> : contient toutes les variables qui seront utilisées dans les ressources. D’une certaine manière, il décrit de manière centrale l'infra à déployer.</li>
+</ol>
+<p>Regardez d'un peu plus près un Template, le <code>Service</code> du Front :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">templates/front-service.yaml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-14-13">13</a></span></pre></div></td><td class="code"><div><pre id="__code_15"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_15 &gt; code"></button><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="p p-Indicator">{{</span><span class="nv">- if .Values.front.enabled</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="hll"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.front.serviceName</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">front</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9"></a><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11"></a><span class="hll"><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.front.servicePort</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><a id="__codelineno-14-12" name="__codelineno-14-12"></a><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13"></a><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">end</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>L'usage de variables Helm est souligné sur les deux lignes en jaune (lignes 5 &amp; 11).
+Chaque variable fait référence à une valeur dans le fichier <code>values.yaml</code> :</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">values.yaml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-22">22</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-23">23</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-24">24</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-25">25</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-26">26</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-27">27</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-28">28</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-15-29">29</a></span></pre></div></td><td class="code"><div><pre id="__code_16"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_16 &gt; code"></button><code><a id="__codelineno-15-22" name="__codelineno-15-22"></a><span class="nn">...</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdb</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24"></a><span class="nt">front</span><span class="p">:</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-15-26" name="__codelineno-15-26"></a><span class="w">  </span><span class="nt">image</span><span class="p">:</span>
+<a id="__codelineno-15-27" name="__codelineno-15-27"></a><span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.gitlab.com/takima-school/images/cdb/www</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28"></a><span class="hll"><span class="w">    </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
+</span><a id="__codelineno-15-29" name="__codelineno-15-29"></a><span class="hll"><span class="nn">...</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Il est donc possible de facilement variabiliser des éléments en plaçant les valeurs dans les fichiers <code>values.yaml</code> et y faisant référence via la syntaxe <code>{{ .Values.x.y }}</code>.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Par la même occasion, vous remarquerez que la première ligne est une condition sur la variable <code>.Values.front.enabled</code> qui englobe l'ensemble du fichier. Ce qui se traduit par : <em>si le Front est enable tout le fichier sera généré et cette ressource</em> sera donc déployée.</p>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">templates/front-service.yaml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-12">12</a></span>
+<span class="normal"><a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-16-13">13</a></span></pre></div></td><td class="code"><div><pre id="__code_17"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_17 &gt; code"></button><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="hll"><span class="p p-Indicator">{{</span><span class="nv">- if .Values.front.enabled</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.name</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-front</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">front</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13"></a><span class="hll"><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">end</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+<p>Vous pouvez ensuite tester Helm pour générer vos ressources à partir de vos Templates et Ressources : 
+</p><div class="highlight"><pre id="__code_18"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_18 &gt; code"></button><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-17-1"></a>helm<span class="w"> </span>template<span class="w"> </span>--values<span class="w"> </span>./values.yaml<span class="w"> </span>./<span class="w"> </span>--output-dir<span class="w"> </span>dist
+</code></pre></div><p></p>
+<p>Vous retrouverez les ressources Kubernetes générées avec vos valeurs dans le dossier <code>dist</code> !</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Vous pouvez aussi utiliser la commande suivante pour debug votre Chart sans créer de fichiers :<br>
+</p><div class="highlight"><pre id="__code_19"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_19 &gt; code"></button><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-18-1"></a>helm<span class="w"> </span>install<span class="w"> </span>cdb<span class="w"> </span>--dry-run<span class="w"> </span>--debug<span class="w"> </span>./
+</code></pre></div><p></p>
+</div>
+<p>Vous pouvez tester de déployer l'ensemble de votre Chart sur votre cluster avec la commande suivante :
+</p><div class="highlight"><pre id="__code_20"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_20 &gt; code"></button><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-19-1"></a>helm<span class="w"> </span>install<span class="w"> </span>cdb<span class="w"> </span>./
+</code></pre></div><p></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>La commande <code>helm install|upgrade</code> n'utilise pas les fichiers générés dans le dossier <code>dist</code>, elle utilise directement vos sources.</p>
+</div>
+<div class="admonition help">
+<p class="admonition-title">Help</p>
+<p>Vous aurez certainement besoin de configurer le Secret (avec les identifiants reçus par mail lors du premier jour) pour pull les images :<br>
+</p><div class="highlight"><pre id="__code_21"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_21 &gt; code"></button><code tabindex="0"><a id="__codelineno-20-1" name="__codelineno-20-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-20-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>docker-registry<span class="w"> </span>takima-school-registry<span class="w"> </span>--docker-server<span class="o">=</span>registry.gitlab.com<span class="w"> </span>--docker-username<span class="o">=</span>readregcred<span class="w"> </span>--docker-password<span class="o">=</span>&lt;PASSWORD&gt;
+</code></pre></div><p></p>
+</div>
+<h3 id="a-vous-de-jouer">À vous de jouer !</h3>
+<p>Maintenant que votre équipe vous a fourni le <strong>Front</strong>, à vous de faire la même chose pour l'<strong>API</strong> et la <strong>DB</strong> !</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Rappel des ressources à générer :<br>
+1. api-deployment.yaml
+2. api-ingress.yaml<br>
+3. api-service.yaml<br>
+4. api-config.yaml
+5. pg-config.yaml
+6. pg-credentials.yaml
+7. pg-deployment.yaml
+8. pg-service.yaml</p>
+</div>
+<div class="admonition help">
+<p class="admonition-title">Help</p>
+<p>Vous pouvez reprendre les ressources créées dans la partie précédente pour vous aider : <a href="https://gitlab.takima.io/school/kubernetes-01/k8s-trainees/-/archive/main/k8s-trainees-main.tar.gz?path=solution/day-2/step-4" target="_blank">https://gitlab.takima.io/school/kubernetes-01/k8s-trainees/-/archive/main/k8s-trainees-main.tar.gz?path=solution/day-2/step-4</a></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Pensez à bien utiliser le système de templating avec le fichier <code>values.yaml</code> et les différents <a href="https://helm.sh/docs/chart_template_guide/control_structures/" target="_blank">outils de Helm</a>.</p>
+</div>
+<p>Une fois terminé, vous pouvez mettre à jour votre Chart sur le Cluster avec la commande :
+</p><div class="highlight"><pre id="__code_22"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_22 &gt; code"></button><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-21-1"></a>helm<span class="w"> </span>upgrade<span class="w"> </span>cdb<span class="w"> </span>./
+</code></pre></div><p></p>
+<h3 id="bonus-1">Bonus 1</h3>
+<p>Et si je vous demandais de changer le nom de votre application ?
+Oui, quand on fait du templating, on remarque aussi que parfois, il y a beaucoup de "redite".
+Les labels, le nom de l'application, etc.</p>
+<p>C'est pour ça que helm vous permet de créer des variables supplémentaires. Par convention, nous recommandons de créer un fichier <strong>templates/_helpers.tpl</strong>.</p>
+<p>De manière traditionnelle, le fichier peut contenir quelques lignes comme ça :
+</p><div class="highlight"><pre id="__code_23"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_23 &gt; code"></button><code tabindex="0"><a id="__codelineno-22-1" name="__codelineno-22-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-1"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-2"></a>Expand<span class="w"> </span>the<span class="w"> </span>name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>chart.
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-3"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-4"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.name"</span><span class="w"> </span>-<span class="o">}}</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-5"></a><span class="o">{{</span>-<span class="w"> </span>default<span class="w"> </span>.Chart.Name<span class="w"> </span><span class="p">|</span><span class="w"> </span>trunc<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>trimSuffix<span class="w"> </span><span class="s2">"-"</span><span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-6"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-7"></a>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-8"></a>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-9"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-10"></a>Application<span class="w"> </span>image<span class="w"> </span>tag
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-11"></a>We<span class="w"> </span><span class="k">select</span><span class="w"> </span>by<span class="w"> </span>default<span class="w"> </span>the<span class="w"> </span>Chart<span class="w"> </span>appVersion<span class="w"> </span>or<span class="w"> </span>an<span class="w"> </span>override<span class="w"> </span><span class="k">in</span><span class="w"> </span>values
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-12"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-13"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.imageTag"</span><span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-14"></a><span class="o">{{</span>-<span class="w"> </span><span class="nv">$name</span><span class="w"> </span>:<span class="o">=</span><span class="w"> </span>default<span class="w"> </span>.Chart.AppVersion<span class="w"> </span>.Values.image.tag<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-15"></a><span class="o">{{</span>-<span class="w"> </span><span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="nv">$name</span><span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-16"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-17"></a>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-18"></a>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-19"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-20"></a>Create<span class="w"> </span>a<span class="w"> </span>default<span class="w"> </span>fully<span class="w"> </span>qualified<span class="w"> </span>app<span class="w"> </span>name.
+<a id="__codelineno-22-21" name="__codelineno-22-21" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-21"></a>We<span class="w"> </span>truncate<span class="w"> </span>at<span class="w"> </span><span class="m">63</span><span class="w"> </span>chars<span class="w"> </span>because<span class="w"> </span>some<span class="w"> </span>Kubernetes<span class="w"> </span>name<span class="w"> </span>fields<span class="w"> </span>are<span class="w"> </span>limited<span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span><span class="o">(</span>by<span class="w"> </span>the<span class="w"> </span>DNS<span class="w"> </span>naming<span class="w"> </span>spec<span class="o">)</span>.
+<a id="__codelineno-22-22" name="__codelineno-22-22" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-22"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-23" name="__codelineno-22-23" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-23"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.fullname"</span><span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-24" name="__codelineno-22-24" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-24"></a><span class="o">{{</span>-<span class="w"> </span><span class="nv">$name</span><span class="w"> </span>:<span class="o">=</span><span class="w"> </span>default<span class="w"> </span>.Chart.Name<span class="w"> </span>.Values.nameOverride<span class="w"> </span>-<span class="o">}}</span>
+<a id="__codelineno-22-25" name="__codelineno-22-25" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-25"></a><span class="o">{{</span>-<span class="w"> </span><span class="nb">printf</span><span class="w"> </span><span class="s2">"%s-%s"</span><span class="w"> </span>.Release.Name<span class="w"> </span><span class="nv">$name</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>trunc<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>trimSuffix<span class="w"> </span><span class="s2">"-"</span><span class="o">}}</span>
+<a id="__codelineno-22-26" name="__codelineno-22-26" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-26"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-27" name="__codelineno-22-27" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-27"></a>
+<a id="__codelineno-22-28" name="__codelineno-22-28" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-28"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-29" name="__codelineno-22-29" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-29"></a>Create<span class="w"> </span>chart<span class="w"> </span>name<span class="w"> </span>and<span class="w"> </span>version<span class="w"> </span>as<span class="w"> </span>used<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>chart<span class="w"> </span>label.
+<a id="__codelineno-22-30" name="__codelineno-22-30" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-30"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-31" name="__codelineno-22-31" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-31"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.chart"</span><span class="w"> </span>-<span class="o">}}</span>
+<a id="__codelineno-22-32" name="__codelineno-22-32" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-32"></a><span class="o">{{</span>-<span class="w"> </span><span class="nb">printf</span><span class="w"> </span><span class="s2">"%s-%s"</span><span class="w"> </span>.Chart.Name<span class="w"> </span>.Chart.Version<span class="w"> </span><span class="p">|</span><span class="w"> </span>replace<span class="w"> </span><span class="s2">"+"</span><span class="w"> </span><span class="s2">"_"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>trunc<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>trimSuffix<span class="w"> </span><span class="s2">"-"</span><span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-33" name="__codelineno-22-33" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-33"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-34" name="__codelineno-22-34" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-34"></a>
+<a id="__codelineno-22-35" name="__codelineno-22-35" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-35"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-36" name="__codelineno-22-36" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-36"></a>Common<span class="w"> </span>labels
+<a id="__codelineno-22-37" name="__codelineno-22-37" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-37"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-38" name="__codelineno-22-38" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-38"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.labels"</span><span class="w"> </span>-<span class="o">}}</span>
+<a id="__codelineno-22-39" name="__codelineno-22-39" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-39"></a>helm.sh/chart:<span class="w"> </span><span class="o">{{</span><span class="w"> </span>include<span class="w"> </span><span class="s2">"MyAppCtx.chart"</span><span class="w"> </span>.<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-40" name="__codelineno-22-40" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-40"></a><span class="o">{{</span><span class="w"> </span>include<span class="w"> </span><span class="s2">"MyAppCtx.selectorLabels"</span><span class="w"> </span>.<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-41" name="__codelineno-22-41" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-41"></a><span class="o">{{</span>-<span class="w"> </span><span class="k">if</span><span class="w"> </span>.Chart.AppVersion<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-42" name="__codelineno-22-42" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-42"></a>app.kubernetes.io/version:<span class="w"> </span><span class="o">{{</span><span class="w"> </span>.Chart.AppVersion<span class="w"> </span><span class="p">|</span><span class="w"> </span>quote<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-43" name="__codelineno-22-43" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-43"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-44" name="__codelineno-22-44" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-44"></a>app.kubernetes.io/managed-by:<span class="w"> </span><span class="o">{{</span><span class="w"> </span>.Release.Service<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-45" name="__codelineno-22-45" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-45"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-46" name="__codelineno-22-46" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-46"></a>
+<a id="__codelineno-22-47" name="__codelineno-22-47" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-47"></a><span class="o">{{</span>/*
+<a id="__codelineno-22-48" name="__codelineno-22-48" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-48"></a>Selector<span class="w"> </span>labels
+<a id="__codelineno-22-49" name="__codelineno-22-49" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-49"></a>*/<span class="o">}}</span>
+<a id="__codelineno-22-50" name="__codelineno-22-50" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-50"></a><span class="o">{{</span>-<span class="w"> </span>define<span class="w"> </span><span class="s2">"MyAppCtx.selectorLabels"</span><span class="w"> </span>-<span class="o">}}</span>
+<a id="__codelineno-22-51" name="__codelineno-22-51" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-51"></a>app.kubernetes.io/name:<span class="w"> </span><span class="o">{{</span><span class="w"> </span>include<span class="w"> </span><span class="s2">"MyAppCtx.name"</span><span class="w"> </span>.<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-52" name="__codelineno-22-52" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-52"></a>app.kubernetes.io/instance:<span class="w"> </span><span class="o">{{</span><span class="w"> </span>.Release.Name<span class="w"> </span><span class="o">}}</span>
+<a id="__codelineno-22-53" name="__codelineno-22-53" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-22-53"></a><span class="o">{{</span>-<span class="w"> </span>end<span class="w"> </span><span class="o">}}</span>
+</code></pre></div><p></p>
+<p>Ces variables pourront être utilisées dans votre chart.</p>
+<p>Appliquez les variables qui vous semblent importantes dans l'ensemble de vos ressources.</p>
+<p><strong>Objectifs :</strong> 
+ * une modification du <strong>chart name</strong> ou du <strong>nameOverride</strong> dans les <strong>values</strong> doit modifier le nom de toutes vos ressources.
+ * vous ne devriez plus avoir besoin de serviceName ou tls secretName dans vos values.yaml.</p>
+<p>Faites bien attention à vos selectors et matchSelectors !</p>
+<h3 id="bonus-2">Bonus 2</h3>
+<p>Peut-être avez-vous remarqué qu'une modification de ConfigMap ne redémarrait pas les deployments.
+C'est normal, car vos applications sont censées pouvoir consommer les ConfigMaps dès qu'elles le souhaitent.
+Pour forcer un redéploiement lors de la modification d'une ConfigMap associée, vous pouvez déclarer une annotation supplémentaire dans le Deployment concerné. Ainsi une modification de la configMap entrainera une modification du checksum et donc du déploiement :</p>
+<div class="highlight"><pre id="__code_24"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_24 &gt; code"></button><code tabindex="0"><a id="__codelineno-23-1" name="__codelineno-23-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-23-1"></a><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-23-2"></a><span class="w">  </span><span class="nt">checksum/config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include (print $.Template.BasePath "/configmap.yaml") . | sha256sum</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</code></pre></div>
+<p>Dès que le hash de la configmap changera, le deployment sera considéré comme différent, et donc appliqué.</p>
+<h3 id="bonus-3">Bonus 3</h3>
+<p>Maintenant, votre équipe revient vers vous et souhaite ajouter un nouvel environnement de test.<br>
+Aucun problème, car vous avez déjà toute la structure avec Helm template !</p>
+<p>L'environnement de test se présente comme suit :
+</p><div class="highlight"><pre id="__code_25"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_25 &gt; code"></button><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-24-1"></a><span class="nv">API_URL</span><span class="o">=</span>api.staging.votreusername.takima.school
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-24-2"></a><span class="nv">WWW_URL</span><span class="o">=</span>www.staging.votreusername.takima.school
+</code></pre></div><p></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Vous pouvez ajouter autant de Values que vous le souhaitez avec la commande Helm :<br>
+<code>helm template --values ./values.yaml --values ./values.env.yaml ./ --output-dir dist</code></p>
+</div>
+<h4 id="a-vous-de-jouer_1">À vous de jouer</h4>
+<p>Avec toutes les informations dont vous disposez, vous pouvez créer les fichiers nécessaires pour que votre Chart s'adapte facilement avec le nouvel environnement.</p>
+<h2 id="gitops-avec-argocd">GitOps avec ArgoCD</h2>
+<p>Avant de commencer cette partie, pensez à détruire l'environnement créé avec vos templates Helm :</p>
+<div class="highlight"><pre id="__code_26"><span></span><button class="md-clipboard md-icon" title="Copy to clipboard" data-clipboard-target="#__code_26 &gt; code"></button><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch3-gitops/#__codelineno-25-1"></a>helm<span class="w"> </span>delete<span class="w"> </span>mon-app
+</code></pre></div>
+<p>Vous savez faire un joli Template Helm que vous déployez à la main.</p>
+<p>La première chose à dire, c'est qu'il existe de multiples manières de faire du GitOps : il serait facile de mettre en œuvre un peu de scripting avec Gitlab-CI par exemple, pour faire un <code>helm upgrade...</code> automatiquement lorsqu'on veut déployer un applicatif sur un cluster.</p>
+<p>L'inconvénient avec cette approche est que le flux serait uniquement descendant (de Gitlab au Cluster).</p>
+<p>ArgoCD a deux rôles majeurs :</p>
+<ol>
+<li>Faciliter la configuration de ces jobs (plus facile que via du scripting).</li>
+<li><strong>Synchroniser</strong> en permanence l'état du Cluster avec celui de Git, même si les ressources du Cluster changent de leur côté.</li>
+</ol>
+<p>Vous aurez l'occasion de vérifier et constater cela dans le TP !</p>
+<h3 id="accedez-au-portail-argocd">Accédez au portail ArgoCD.</h3>
+<p>Rendez-vous sur <a href="https://argocd.takima.school/" target="_blank">https://argocd.takima.school</a> et entrez votre username / mot de passe (cf mail envoyé).</p>
+<h3 id="importez-votre-repository-gitlab">Importez votre Repository Gitlab.</h3>
+<p>Dans le menu de gauche, allez dans <strong>Repositories</strong>
+<img alt="Repositories" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-repositories.jpg"></p>
+<p>Puis ajoutez votre repo Git créé dans la journée.</p>
+<p>Attention de bien associer le Repository à votre <strong>projet</strong> (qui porte le même nom que votre Username).</p>
+<p><img alt="Create repository with argo" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-create-repo.png"></p>
+<p>Un projet a été créé par Namespace et votre projet ne pourra déployer de ressources que dans ce Namespace.</p>
+<h3 id="creez-une-application">Créez une application.</h3>
+<p>Vous allez maintenant créer votre application.</p>
+<p>Dans ArgoCD, ajoutez une app avec le bouton approprié et le volet ci-dessous devrait s'afficher :</p>
+<p><img alt="Create app with argo" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-create-app-1.png"></p>
+<p>Entrez le nom de l'application <code>${yourName}-cdb</code> (les noms de projet sont uniques sous ArgoCD), choisissez bien votre <strong>projet</strong>, et ajustez la politique de synchronisation.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>La politique de synchronisation définit si ArgoCD sera en synchronisation manuelle ou automatique.<br>
+La synchronisation automatique, avec le Prune de Ressources et le Self-Healing sont vraiment les atouts recherchés dans ArgoCD.<br>
+ArgoCD aura donc pour objectif d'avoir un Cluster parfaitement synchronisé avec Git et aura les pouvoirs de prendre toute action pour s'en approcher.<br>
+Bien sûr, une gestion très fine des droits de "qu'est-ce que ArgoCD peut faire ou non" est disponible dans le logiciel, mais ce n'est pas le sujet de ce TP.</p>
+</div>
+<p>Choisissez votre Repository (il n'y a pas de restrictions de vue des différents Repositories) et sélectionnez la bonne branche ainsi que le chemin vers votre Chart (le dossier où se trouve le <code>Chart.yaml</code> et <code>values.yaml</code>), à la racine du dépôt <code>.</code>.</p>
+<p><img alt="Create app with argo - source" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-create-app-2.png"></p>
+<p>Choisissez ensuite le Cluster (il n'y en a qu'un seul, le local), ainsi que le Namespace dans lequel vous allez déployer votre app.</p>
+<p>Le Namespace correspond à votre username, vous ne pourrez pas déployer dans un autre Namespace.</p>
+<p><img alt="Create app with argo - destination cluster" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-create-app-3.png"></p>
+<p>La dernière partie s'affiche automatiquement, car ArgoCD va examiner votre Repository.
+Comme vous avez utilisé Helm, il suffit de sélectionner le chemin des <code>values.yaml</code> (il doit être proposé directement).</p>
+<p><img alt="Create app with argo - helm file" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-create-app-4.png"></p>
+<p>Normalement, c'est tout bon ! Il ne vous reste plus qu'à valider.</p>
+<p>Pensez à push sur votre répertoire git quand vous faites des changements, sinon ArgoCD ne pourra pas voir ces changements.</p>
+<p>Si tout s'est bien passé, vous devriez voir avec fierté que votre app est renseignée.</p>
+<p><img alt="Create app with argo - result" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-app-overview.png"></p>
+<p>Vous pouvez cliquer dessus, observer les différentes ressources et leur état dans Kubernetes.</p>
+<p>Félicitations, votre application est maintenant en mode GitOps !</p>
+<p><img alt="Create app with argo - resources" src="./Day 3 - GitOps - Kubernetes in action_files/argocd-resources.png"></p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Pour vérifier que tout fonctionne, essayez de détruire un deployment manuellement dans votre Cluster.
+Que se passe-t-il ?</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Essayez de modifier le values.yaml en augmentant le replicaCount par exemple. Que se passe-t-il ?</p>
+</div>
+<h3 id="bonus-un-nouvel-environnement">Bonus : un nouvel environnement</h3>
+<p>L'utilisation d'ArgoCD n'était pas si complexe que ça. Sauf que pour l'instant, vous n'avez qu'un environnement, et Michel, votre Product Owner adoré, souhaiterait vraiment pouvoir disposer d'un environnement de pré-production.</p>
+<p>De manière conventionnelle, les best-practices voudraient qu'on appréhende cet environnement dans un autre Namespace et parfois même dans un autre Cluster.</p>
+<p>Dans ce TP, on va s'autoriser à en déployer un nouveau dans le même Namespace.</p>
+<p>Créez un nouveau fichier de <em>values</em> appelé <code>values.staging.yaml</code>, utilisez le nom de domaine staging.<strong>votreusername</strong>.takima.school,
+et créez la ou les apps dans ArgoCD pour déployer la pré-production de votre app.</p>
+<p>Pour faciliter la recherche, n'hésitez pas à créer un label staging sur toutes ces apps afin de faciliter l'affichage.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch2-deep-dive/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Day 2 - Deep Dive" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Day 2 - Deep Dive
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="http://school.pages.takima.io/kubernetes-01/k8s-trainees/ch4-monitoring/" class="md-footer__link md-footer__link--next" aria-label="Next: Day 4 - Monitoring" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Day 4 - Monitoring
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2023 - 2024 Takima
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.c7dec7e7.min.js"}</script>
+    
+    
+      <script src="./Day 3 - GitOps - Kubernetes in action_files/bundle.da79ceb7.min.js"></script>
+      
+    
+  
+</body></html>

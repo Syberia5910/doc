@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: {{ template "AppCtxWithEnv.name" . }}-db
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "dbSelector.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "dbSelector.name" . }}
+    spec:
+      containers:
+      - image: {{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}
+        name: {{ template "apiSelector.name" . }}
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: db
+          - name: PGDATA
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: db_path
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: pg-data
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: {{ template "AppCtxWithEnv.name" . }}-db
+      imagePullSecrets:
+        - name: takima-school-registry

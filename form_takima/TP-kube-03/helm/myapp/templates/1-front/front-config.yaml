@@ -1,0 +1,8 @@
+{{- if .Values.front.enabled }}
+apiVersion: v1  
+kind: ConfigMap  
+metadata:
+  name: {{ template "AppCtxWithEnv.name" . }}-front  
+data:
+  API_URL: {{ template "ApiUrl" . }} 
+{{- end }}

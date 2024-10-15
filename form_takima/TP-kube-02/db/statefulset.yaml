@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: dbsfs
+  name: dbsfs
+spec:  
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbsfs
+  template:
+    metadata:
+      labels:
+        app: dbsfs
+    spec:
+      containers:
+      - image: registry.takima.io/school/proxy/postgres:latest
+        name: dbsfs
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: db-cm
+                key: cdb-user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: db-cm
+                key: cdb-db
+          - name: PGDATA
+            valueFrom:
+              configMapKeyRef:
+                name: db-cm
+                key: db_path
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: pg-data
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-pvc
+      imagePullSecrets:
+        - name: takima-school-registry
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

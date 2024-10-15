@@ -1,0 +1,61 @@
+{{- if .Values.api.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: {{ template "AppCtxWithEnv.name" . }}-api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "apiSelector.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "apiSelector.name" . }}
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+        name: {{ template "apiSelector.name" . }}
+        env:
+          - name: DB_ENDPOINT
+            value: {{ template "AppCtxWithEnv.name" . }}-db:5432
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "AppCtxWithEnv.name" . }}-db
+                key: db
+        resources:
+          limits:
+            memory: "256M"
+            cpu: "2"
+          requests:
+            memory: "192M"
+            cpu: "100m"  
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: takima-school-registry
+{{- end }}

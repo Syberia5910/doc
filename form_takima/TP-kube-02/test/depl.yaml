@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api-aajiddou
+  name: api-aajiddou
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: api-aajiddou
+  template:
+    metadata:
+      labels:
+        app: api-aajiddou
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: registry.gitlab.com/takima-school/images/cdb/api:latest
+        name: api-aajiddou
+        env:
+          - name: DB_ENDPOINT
+            value: formation-cdb.aajiddou:5432
+          - name: POSTGRES_USER
+            value: cdb
+          - name: POSTGRES_PASSWORD
+            value: cdb
+          - name: POSTGRES_DB
+            value: cdb
+        resources:
+          limits:
+            memory: "256M"
+            cpu: "2"
+          requests:
+            memory: "192M"
+            cpu: "100m"  
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: takima-school-registry

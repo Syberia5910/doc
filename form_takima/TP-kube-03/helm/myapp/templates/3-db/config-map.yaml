@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "AppCtxWithEnv.name" . }}-db
+data:
+  db: mydb
+  username: myusr
+  db_path: "/var/lib/postgresql/data/pgdata"

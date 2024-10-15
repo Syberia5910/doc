@@ -1,0 +1,28 @@
+env: stagging
+name: cdb
+url_suffix: nicolas-lecaille.takima.school
+
+api:
+  enabled: true
+  image:
+    repository: registry.gitlab.com/takima-school/images/cdb/api
+    tag: latest
+  ingress:
+    tlsEnabled: false
+    prefix: api
+
+front:
+  enabled: true
+  image:
+    repository: registry.gitlab.com/takima-school/images/cdb/www
+    tag: latest
+  replicaCount: 1
+  ingress:
+    tlsEnabled: false
+    prefix: www
+
+db:
+  storageSize: 3Gi
+  image:
+    repository: registry.takima.io/school/proxy/postgres
+    tag: latest
